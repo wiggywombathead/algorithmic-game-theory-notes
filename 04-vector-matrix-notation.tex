@@ -1,0 +1,94 @@
+\section{Vector-matrix notation for 2-player games}
+	Let the payoffs to player I be denoted by the matrix $\vect{A}$, where
+	entry $\vect{A}_{ij}$ gives the payoff to player I when playing strategy $i
+	\in S_\text{I}$ given that player II is playing strategy $j \in
+	S_\text{II}$. Define player II's payoff matrix $\vect{B}$ in a similar
+	fashion, where the rows still represent player I's strategies and the
+	columns player II's.
+
+	Let $\vect{x} \in \Delta^{m_1}$ denote player I's mixed strategy, and
+	$\vect{y} \in \Delta^{m_2}$ denote player II's. Then player I's expected
+	payoff from playing pure strategy $i \in S_\text{I}$ is given by the entry
+	$(\vect{Ay})_i$, and player II's expected payoff from playing pure strategy
+	$j \in S_\text{II}$ is given by $(\vect{x^\top B})_j$.
+
+	Note when computing player II's expected utility each entry in the
+	resulting vector is for some fixed column, while when computing player I's
+	then each entry is for some fixed row.
+
+	\subsection{Example}
+		Suppose we have the following two-player zero-sum (i.e. $\vect{B} =
+		-\vect{A}$) game:
+		\begin{equation*}
+			\vect{A} = 
+			\begin{pmatrix}
+				28 & 1 & -38 & -11 \\
+				4 & 3 & 2 & -3 \\
+				5 & -3 & 4 & 3 \\
+				-19 & -9 & 29 & 1
+			\end{pmatrix},
+			\vect{x} =
+			\begin{pmatrix}
+				0 \\
+				\frac{1}{2} \\
+				\frac{1}{2} \\
+				0
+			\end{pmatrix},
+			\vect{y} = 
+			\begin{pmatrix}
+				0 \\
+				\frac{1}{2} \\
+				0 \\
+				\frac{1}{2}
+			\end{pmatrix}
+		\end{equation*}
+
+		In this example, player I's expected utilities $\vect{A} \vect{y}
+		= \begin{pmatrix} -5 & 0 & 0 & 4 \end{pmatrix}$ and player II's expected
+		utilities $\vect{x}^\top \vect{B} = \begin{pmatrix} -\frac{9}{2} & 0
+		& -3 & 0 \end{pmatrix}$. Hence pure strategies 2 and 3
+		are best responses for player I to $\vect{y}$ (as they yield the
+		highest expected utility, 0), and furthermore player I is indifferent
+		to them. Similarly pure strategies 2 and 4 are best responses for
+		player II to $\vect{x}$, and is also indifferent to them.
+
+		Note that:
+		\begin{equation*}
+			\vect{x} =
+			\begin{pmatrix}
+				0 \\
+				\frac{1}{2} \\
+				\frac{1}{2} \\
+				0
+			\end{pmatrix},
+			\vect{A} \vect{y} =
+			\begin{pmatrix}
+				-5 \\
+				0 \\
+				0 \\
+				-4
+			\end{pmatrix}
+		\end{equation*}
+
+		Thus $\vect{x}$ is a best response to $\vect{y}$ (strategies 2 and 3
+		for I are best responses to $\vect{y}$, and player I mixes between
+		strategies 2 and 3). Similarly:
+		\begin{equation*}
+			\vect{y} =
+			\begin{pmatrix}
+				0 \\
+				\frac{1}{2} \\
+				0 \\
+				\frac{1}{2} \\
+			\end{pmatrix},
+			\vect{x}^\top \vect{B} = 
+			\begin{pmatrix}
+				-\frac{9}{2} \\
+				0 \\
+				-3 \\
+				0 \\
+			\end{pmatrix}
+		\end{equation*}
+
+		Hence $\vect{y}$ is a best response to $\vect{x}$ (strategies 1 and
+		3 are best responses, and II mixes between strategies 1 and 3).

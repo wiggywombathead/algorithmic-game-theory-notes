@@ -1,0 +1,42 @@
+\section{Network Routing games}
+We turn our attention now to network flows, and begin by defining the following
+model. Let $G=(V,E)$ be a directed graph with:
+\begin{itemize}
+	\item $k$ source-destination pairs $(s_i, t_i)$, each with demand $r_i \in \mathbb{R}_{\ge 0}$.
+	\item latency functions $\ell_e : \mathbb{R}_{\ge 0} \rightarrow
+		\mathbb{R}_{\ge 0}$ for all edges, mapping traffic to latency
+	\item $p_i$, the set of paths from $s_i$ to $t_i$ for each
+		source-destination pair
+	\item Let $P := \bigcup^k p_i$
+	\item Flow $f : P \rightarrow \mathbb{R}_{\ge 0}$ such that $\sum_{p \in
+		P_i} f(p) = r_i$
+	\item Flow on edge $e$ $f_e : \sum_{p \in P_i : e \in p} f(p)$
+	\item Latency of path $p$ $L_p (f) := \sum_{e \in p} \ell_e (f_e)$
+	\item Social cost of flow $C(f) = \sum_{p \in P} f(p) \cdot L_p(f) =
+		\sum_{e \in E} f(e) \cdot \ell_e (f_e)$
+\end{itemize}
+
+Consider the following example:
+TODO
+
+We have:
+\begin{itemize}
+	\item $\ell_A(x) = x$, $\ell_B(x) = 1$, $\ell_C(x) = 1$, $\ell_D(x) = x$
+	\item $P = p_1 = \{ (A,B), (C,D) \}$
+\end{itemize}
+
+Call $(A,B)$ the ``up'' path, and $(C,D)$ the ``down'' path. Consider the flow
+$f$ for $\lambda \in [0,1]$ where $f^\lambda(\text{up}) = \lambda$ and
+$f^\lambda(\text{down}) = 1 - \lambda$. We have the following flows on edges:
+\begin{equation*}
+	\begin{split}
+		f_A^\lambda = f_B^\lambda = \lambda \\
+		f_C^\lambda = f_D^\lambda = 1 - \lambda
+	\end{split}
+\end{equation*}
+
+The latencies of the paths are $L_\text{up}(f^\lambda) =
+\ell_A(f_A^\lambda) + \ell_B(f_B^\lambda) = \ell_A(\lambda) + \ell_B(\lambda) =
+\lambda + 1$, and $L_\text{down}(f^\lambda) = \ell_C(f_C^\lambda) +
+\ell_D(f_D^\lambda) = \ell_C(1 - \lambda) + \ell_D(1 - \lambda) = 1 + 1 -
+\lambda = 2 - \lambda$.

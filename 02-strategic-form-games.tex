@@ -1,0 +1,62 @@
+\section{Strategic Form Games}
+	\begin{definition}[Strategic Form Game]
+		A \textit{strategic form game} consists of:
+		\begin{itemize}
+			\itemsep0em
+			\item Players ${1, \ldots, n}$
+			\item For each player $i$, a finite set $S_i$ of strategies
+			\item For each player $i$, the function $u_i : S_1 \times \ldots \times S_n \rightarrow \mathbb{R}$ that maps a \textit{strategy profile} to a real-numbered payoff to player $i$
+		\end{itemize}
+	\end{definition}
+
+	A \textit{strategy profile} is a vector of strategies that fully specifies
+	all actions in a game. It must include exactly one strategy for each
+	player. Denote by $\mathcal{S} = \times_i S_i$ the set of all strategy
+	profiles, that is, $\mathcal{S}$ is the set of all possible combinations of
+	players' strategies.
+
+	\begin{remark}
+		Each player's utility function is defined as $u_i : \mathcal{S}
+		\rightarrow \mathbb{R}$, and not, say, $u_i : S_i \rightarrow \mathbb{R}$.
+		That is, the payoff to player $i$ depends both on his own strategy and
+		the strategy chosen by each other player (if the latter were the case,
+		the game would only consist of $n$ separate optimization problems, one
+		for each $i$).
+	\end{remark}
+
+	Playing a game consists of:
+	\begin{enumerate}
+		\itemsep0em
+		\item simultaneously\footnote{i.e., players do not know what everyone else is doing as they are doing it}, each player $i$ chooses a strategy $s_i \in S_i$ that strives to maximise their own utility (\textbf{self-interest assumption})
+		\item each player $i$ receives utility $u_i(s_1, \ldots, s_n)$
+	\end{enumerate}
+
+	\begin{definition}[Strict dominance]
+		A strategy $s \in S_i$ \textit{strictly dominates} another strategy $t
+		\in S_i$ if for all strategy profiles $s_{-i} \in S_{-i}$:
+		\begin{equation}
+			u_i(s_{-i}, s) > u_i(s_{-i}, t)
+		\end{equation}
+	\end{definition}
+
+	\begin{fact}
+		If strategy profiles $s,t \in S_i$ are such that $s$ strictly dominates
+		$t$ in game $\Gamma$, then the games $\Gamma$ and $\Gamma \setminus t$
+		are equivalent.
+	\end{fact}
+
+	\begin{definition}[Dominance-solvability]
+		A game is \textit{dominance solvable} if Iterated Elimination of
+		Strictly Dominated Strategies (IESDS) yields a unique strategy profile
+		(i.e. a $1 \times 1 \times \ldots$ game).
+	\end{definition}
+
+	\begin{fact}
+		The outcome of IESDS is always unique, meaning the order of elimination
+		does not matter.
+	\end{fact}
+
+	\begin{fact}
+		Not all games are dominance-solvable.
+	\end{fact}
+

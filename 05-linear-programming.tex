@@ -1,0 +1,50 @@
+\section{Linear Programming and LP Duality}
+	A linear program is a linear optimisation problem -- we are maximising
+	(minimising) a linear objective function, subject to a set of linear
+	constraints (inequalities).
+
+	\begin{definition}[Linear Program]
+		Given a matrix $\vect{A} \in \mathbb{R}^{m \times n}$ and vectors
+		$\vect{b} \in \mathbb{R}^m, \vect{c} \in \mathbb{R}^n$, we want to
+		find a vector $\vect{x} \in \mathbb{R}^n$ such that:
+		
+		\begin{equation}
+			\begin{split}
+				\vect{x} \in \argmax \vect{c}^\top \vect{x} \\
+				\vect{A}\vect{x} \le \vect{b} \\
+				\vect{x} \ge \vect{0}
+			\end{split}
+		\end{equation}
+	\end{definition}
+
+	\subsection{Taking the Dual}
+		There are four steps to taking the dual: swap maximise with minimise,
+		swap vectors $\vect{b}$ and $\vect{c}$, transpose $\vect{A}$, and
+		change the direction of the (non-trivial) inequalities. In the dual
+		there is one variable for every constraint, and one constraint for
+		every variable. Hence for a primal LP with $n$ variables and $m$
+		constraints, the dual LP will have $m$ variables and $n$ constraints.
+
+		Consider the primal linear program, P:
+		\begin{equation}
+			\begin{split}
+				\text{maximise } \vect{c}^\top \vect{x} \text{ subject to }
+				\vect{A}\vect{x} & \le \vect{b} \\
+				\vect{x} & \ge \vect{0}
+			\end{split}
+		\end{equation}
+	
+		The dual of the linear program P, D, is as follows:
+		\begin{equation}
+			\begin{split}
+				\text{minimise } \vect{b}^\top \vect{y} \text{ subject to }
+				\vect{A}^\top \vect{y} & \ge \vect{c} \\
+				\vect{y} & \ge \vect{0}
+			\end{split}
+		\end{equation}
+
+		\begin{theorem}[Strong Duality]
+			If P or D has an optimal solution of finite value, then so too does
+			the other, and the value of the objective function of the optimal
+			solutions are equal.
+		\end{theorem}

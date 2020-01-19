@@ -1,0 +1,172 @@
+\section{Complexity of computing equilibria}
+We can compute Nash Equilibria in two-player zero-sum games in polynomial time
+using linear programming as in Section~\ref{sec:TPZSgames}. However, in general
+it is not possible to compute exact Nash Equilibria unless some artificial
+encoding of the output is used, as Nash Equilibria may contain irrational
+numbers.
+
+\begin{definition}[$\varepsilon$-Nash Equilibrium]
+	A strategy profile $
+	sigma^*$ is an $\varepsilon$-Nash Equilibrium if for all players $i$ and
+	for all pure strategies $\sigma_i \in \Delta^{|S_i|}$:
+	\begin{equation}
+		u_i(\sigma^*_{-i}, \sigma^*_i) \ge u_i(\sigma^*_{-i}, \sigma_i) - \varepsilon
+	\end{equation}
+\end{definition}
+
+\begin{definition}[$\varepsilon$-approximate fixed point]
+	Let $S$ be a normed space (i.e. a space on which a norm is defined). The
+	point $x^*$ is an $\varepsilon$-approximate fixed point of $f:S \rightarrow
+	S$ if $|f(x^*) - x^*| \le \varepsilon$.
+\end{definition}
+
+Let $M = \max_i |S_i|$ and $R$ be the difference between the largest and
+smallest payoff in the game. Let
+\begin{equation}
+	\alpha = \frac{\varepsilon}{M^2 R^2}
+\end{equation}
+
+Any $\alpha$-approximate fixed point of the function constructed in the proof
+of Nash's Theorem corresponds to an $\varepsilon$-Nash Equilibrium. The
+function in the proof of Nash's Theorem is sufficiently ``smooth'', so that by
+dividing the domain into a fine grid and applying Sperner's Lemma, we can find
+an approximate fixed point of the function. The following fact formalises the
+intuition of smoothness.
+
+\begin{fact}
+	\label{fact:Lipschitz}
+	The function constructed in Nash's Theorem is $O(nM^2R)$-Lipschitz, i.e.,
+	for all $x, y$:
+	\begin{equation}
+		||f(x) - f(y)||_\infty \le O(nM^2R) \cdot ||x - y||_\infty
+	\end{equation}
+\end{fact}
+
+\subsection{Scarf's Theorem}
+The following theorem by Scarf connects Lipschitz-continuity of a function and
+the granularity of the subdivision of our domain required to identify
+$\alpha$-approximate fixed points.
+
+\begin{theorem}[Scarf's]
+	Let $S$ be a $d$-dimensional simplex that is subdivided into subsimplices
+	of diameter at most $\delta > 0$. Let $f:S \rightarrow S$ be a function
+	from $S$ to itself. Colour every vertex $v$ of every subsimplex according
+	to the rules from Brouwer's Theorem (i.e., if $v$ receives a colour, then
+	$f(v)_i \le v_i$. If we choose $\delta$ such that:
+	\begin{itemize}
+		\item $\delta \le \frac{\alpha}{2d}$
+		\item $||x-y||_\infty \le \delta \Rightarrow ||f(x)-f(y)||_\infty \le
+			\frac{\alpha}{2d}$ for all $x,y$
+	\end{itemize}
+	Then any point in a fully-coloured subsimplex is an $\alpha$-approximate
+	fixed point.
+\end{theorem}
+
+\begin{proof}[Proof 1]
+	Consider point $x=(x_1, \ldots, x_{d+1})$ in a fully-coloured simplex.
+	Either $x$ is already a fixed point, or one of the coordinates of $x$
+	decreases.  WLOG assume $x_1$ decreases, so $f(x)_1 < x_1$. We show that no
+	coordinate can increase by more than $\frac{\alpha}{d}$, i.e. for all $j
+	\in \{1, \ldots, d+1 \}$, $f(x)_j \le x_j + \frac{\alpha}{d}$. This is
+	certainly true for $j=1$; assume for contradiction that it is not true for
+	some other $j$, i.e. that there is a $j \in \{2,\ldots,d+1\}$ such that:
+	\begin{equation*}
+		f(x)_j > x_j + \frac{\alpha}{d}
+	\end{equation*}
+
+	Let $y$ be the corner of the subsimplex with colour $j$ -- $y$ is a corner
+	such that $f(y)_j \le y_j$. Note that both $x$ and $y$ are in the
+	subsimplex of diameter $\delta$, hence
+	\begin{equation*}
+		f(y)_j \le y_j \le x_j + \delta
+	\end{equation*}
+
+	Combining the two inequalities, we get
+	\begin{equation}
+		\label{equ:scarfs1}
+		f(x)_j - f(y)_j > \frac{\alpha}{d} - \delta \ge \frac{\alpha}{2d}
+	\end{equation}
+
+	As $x$ and $y$ are both in the subsimplex we have have $||x-y||_\infty \le
+	\delta$, and by the smoothness of the subdivision we have
+	$||f(x)-f(y)||_\infty \le \frac{\alpha}{2d}$. Hence, $f(x)_j - f(y)_j \le
+	\frac{\alpha}{2d}$ (since $||f(x)-f(y)||_\infty \le k$ means that $f(x)_j -
+	f(y)_j \le k$ for all $j$).  However this contradicts~\eqref{equ:scarfs1}
+	-- that $f(x)_j - f(y)_j > \frac{\alpha}{2d}$ -- so we have that $f(x)_j
+	\le x_j + \frac{\alpha}{d}$ for all $j \in \{1,\ldots,d+1\}$.
+
+	Since we are working with Barycentric coordinates, all coordinates must sum
+	to 1. If $f(x)_j \le x_j + \frac{\alpha}{d}$ for all $j \in
+	\{1,\ldots,d+1\}$, then $f(x)_j \ge x_j - \alpha$ for all $j \in
+	\{1,\ldots,d+1\}$. Hence $x$ is an $\alpha$-approximate fixed point of $f$.
+\end{proof}
+
+\begin{proof}[Proof 2]
+	Consider the point $x=(x_1,\ldots,x_{d+1})$ is a fully-coloured subsimplex.
+	We prove that $x$ is an $\alpha$-approximate fixed point of $f$ by showing
+	that for every $j \in \{1,\ldots,d+1\}$:
+	\begin{enumerate}[label=\arabic*),ref=(\arabic*)]
+		\item $f(x)_j - x_j \le \frac{\alpha}{d}$ \label{item:scarf1}
+		\item $f(x)_j - x_j \ge -\alpha$ \label{item:scarf2}
+	\end{enumerate}
+
+	We begin by showing \ref{item:scarf1}. Let $y$ be the corner of the same
+	subsimplex that has colour $j$, i.e. $f(y)_j < y_j$. Since $x$ and $y$ are
+	in the same subsimplex of diameter $\delta$, we have $y_j \le x_j +
+	\delta$ (since $||x-y||_\infty \le \delta$). By the smoothness of $f$, we
+	have $||f(x)-f(y)||_\infty \le \frac{\alpha}{2d}$.
+
+	Now:
+	\begin{equation*}
+		\begin{split}
+			f(x)_j - x_j = [ f(x)_j - f(y)_j ] + [f(y)_j - x_j] & \le
+			\frac{\alpha}{2d} + [ y_j - x_j ] \\
+			& \le \frac{\alpha}{2d} + \delta \\
+			& \le \frac{\alpha}{2d} + \frac{\alpha}{2} = \frac{\alpha}{d}
+		\end{split}
+	\end{equation*}
+
+	Hence we have shown that $f(x)_j - x_j \le \frac{\alpha}{d}$. Now we show
+	\ref{item:scarf2}: that $x_j - f(x)_j \le \alpha$. We have:
+	\begin{equation*}
+		\begin{split}
+			x_j - f(x)_j & = [ 1 - \sum_{i:i\neq j} x_i ] - [ 1 - \sum_{i:i\neq
+			j} f(x)_i ] \\
+			& = \sum_{i: i \neq j} (f(x)_i - x_i) \le d \cdot \frac{\alpha}{d}
+		\end{split}
+	\end{equation*}
+
+	Therefore every coordinate is at most $\alpha$ away from the coordinate's
+	image, hence $x$ is an $\alpha$-approximate fixed point.
+\end{proof}
+
+\subsection{The number of subsimplices}
+Notice that the function from the proof of Nash's Theorem has dimension $d =
+\sum_{i \in [n]} |S_i| = \sum_{i \in [n]} m_i$ (the sum of the number of pure
+strategies for all players). Using Fact~\ref{fact:Lipschitz} and Scarf's
+Theorem, we conclude that if we divide the domain into subsimplices of diameter
+$O(\frac{\alpha}{nd^3R}$, then any point inside a fully-coloured simplex will
+be an $\alpha$-approximate fixed point of the function. Hence $O([ \frac{(nM)^2
+R}{\alpha} ]^d)$ many subsimplices are sufficient. We can find a fully-coloured
+subsimplex (by searching all of them), and this will correspond to an
+$\alpha$-approximate fixed point, hence an approximate Nash Equilibrium. Note
+that the total number of subsimplices is polynomial in $\varepsilon$ but
+exponential in the number of pure strategies.
+
+\begin{corollary}
+	There exists a constant $c'$ such that if $\delta = c' \cdot
+	\frac{\alpha}{ndM^2R}$, then every point in a fully-coloured simplex is
+	an $\varepsilon$-Nash Equilibrium.
+\end{corollary}
+\begin{proof}
+	We use Scarf's Theorem and Fact~\ref{fact:Lipschitz}. We divide $S$ into
+	subsimplices of degree $\delta = c' \cdot \frac{\alpha}{ndM^2R} = c' \cdot
+	\frac{\varepsilon}{ndM^4R^2}$. The number of subsimplices in each
+	subdivision is $\frac{1}{d} = \frac{ndM^4R^2}{c' \varepsilon}$. This is
+	$O(\frac{1}{\delta}^d)$.
+\end{proof}
+
+We can compute such a $c$ by simply enumerating all subsimplices and checking
+which correspond to Nash Equilibria. However, note that that while the total
+number of subsimplices is polynomial in $\varepsilon$, it is exponential in the
+number of pure strategies.

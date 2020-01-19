@@ -1,0 +1,342 @@
+\section{Nash's Theorem}
+	We prove that every finite game has a Nash Equilibrium by drawing together
+	two seemingly unrelated things.
+
+	\subsection{Sperner's Lemma}
+	Consider the graph formed from the triangulation of a triangle -- that is,
+	a graph that is made up only of smaller triangles.
+
+	\begin{definition}[Valid colouring]
+		A valid colouring is a colouring of the vertices, each with a colour in
+		the set $\{R,G,B\}$, such that:
+		\begin{itemize}
+			\item each of the three corners is a distinct colour
+			\item no vertex on the side of the big triangle has the same colour
+				as the opposite corner
+		\end{itemize}
+	\end{definition}
+
+	We call a triangle \textit{panchromatic} if each of its vertices have a
+	unique colour. We will now state Sperner's Lemma and prove it in two
+	different ways.
+
+	\begin{theorem}[Sperner's Lemma]
+		Every valid colouring has an odd number of panchromatic triangles.
+	\end{theorem}
+
+	\begin{proof}[Proof 1 \emph{(by counting RB triangles)}]
+		Let:
+		\begin{itemize}
+			\item $\bigtriangleup^{RGB} :=$ number of RGB triangles
+			\item $\bigtriangleup^{RB} :=$ number of RB triangles
+			\item $|^{RB}_X :=$ number of external RB edges, $|^{RB}_I :=$
+				number of internal RB edges
+		\end{itemize}
+
+		By an external edge, we mean an edge that was formed directly from the
+		original triangle, and an internal edge is every edge contained inside
+		the triangulation.
+
+		\begin{claim*}
+			$|^{RB}_X$ is odd.
+		\end{claim*}
+		\begin{subproof}
+			Consider two corners of the large triangle, where the first is
+			coloured red, and the other blue. Since we have a valid colouring,
+			no vertex along the edges joining these two corners is coloured
+			green, so we only have RB, RR, or BB edges. We get a new RB edge
+			whenever we change colour. Since the colours of the corners are
+			different, we must change colour an odd number of times, so the
+			number of RB edges on the exterior is odd.
+		\end{subproof}
+
+		\begin{claim*}
+			Each RGB triangle has one RB edge. Each RB triangle has two RB
+			edges. All other triangles have 0 RB edges.
+		\end{claim*}
+
+		\begin{claim*}
+			$\bigtriangleup^{RGB} + 2\bigtriangleup^{RB} = |^{RB}_X +
+			2|^{RB}_I$
+		\end{claim*}
+		\begin{subproof}
+			The number of RB edges is equal to
+			$\bigtriangleup^{RGB}+2\bigtriangleup^{RB}$. This counts all
+			the interior RB edges twice, as each internal edge separates two
+			triangles, and each external RB edge once, as exactly one triangle
+			touches it.
+		\end{subproof}
+
+		Hence $\bigtriangleup^{RGB} = |^{RB}_X + 2|^{RB}_I -
+		2\bigtriangleup^{RB} = 2(|^{RB}_I - \bigtriangleup^{RB}) +
+		|^{RB}_X$, which is odd.
+	\end{proof}
+
+	\begin{proof}[Proof 2 \emph{(by following the End-of-a-Line)}]
+		Construct a directed graph based on the triangulation as follows:
+		\begin{itemize}
+			\item add edges from the B corner to all vertices on the RB side
+			\item create a node for each cell (internal triangle), and one for
+				the ``outside'' edge
+			\item create a directed arc across every RB edge, where R is ``to
+				the left'' as we traverse the arc)
+		\end{itemize}
+
+		Every node has in-degree at most one and out-degree at most one. Thus
+		the graph consists only of isolated vertices, edge-disjoint paths, and
+		edge-disjoint cycles. By the Handshaking Lemma, the number of nodes of
+		degree exactly one is even. Nodes with degree exactly one appear 
+		in panchromatic triangles (one way in, no way out), and only RGB
+		triangles contain these nodes of degree exactly one. We began by
+		creating an artificial node outside of the large triangle -- every
+		other node of degree one corresponds to a panchromatic triangle. Hence
+		the number of nodes of degree exactly one in the original graph is odd,
+		so the number of RGB triangles in the original graph is odd.
+	\end{proof}
+
+	\subsection{Brouwer's Fixed Point Theorem}
+	A $k$-simplex is a $k$-dimensional polytope that is the convex hull of its
+	$k+1$ vertices. The standard simplex that we will make use of is a simplex
+	formed from $k+1$ standard unit vectors:
+	\begin{equation}
+		S^d = \{ (x_1, \ldots, x_{d+1}) \, | \, x_1 + \ldots + x_{d+1} = 1, x_i
+		\ge 0 \text{ for } i = 1, \ldots, d+1 \}
+	\end{equation}
+
+	A set is compact if it is \textit{closed} -- it contains all its limit
+	points -- and \textit{bounded} -- all its points lie within some fixed
+	distance from one another.
+
+	A convex set is a set of points such that, given any two points in the set,
+	the line joining them lies entirely within that set.
+
+	A fixed point of a function $f: A \rightarrow B$ is an element of the
+	function's domain that maps to itself, that is, $c \in A$ is a fixed point
+	of $f$ if $f(c) = c$.
+
+	\begin{theorem}[Brouwer's Fixed Point Theorem]
+		If $f: S \rightarrow S$ is a continuous function from a compact convex
+		set to itself, then $f$ has a fixed point.
+	\end{theorem}
+
+	\begin{proof}[Proof \emph{(for d=1)}]
+		$S^1$ is the unit interval. Let $f:[0,1] \rightarrow [0,1]$ be a
+		continuous function. If $f(0)=0$ or $f(1)=1$ then we have found our
+		fixed point. Otherwise, we have $f(0)>0$ and $f(1)<1$. The function
+		$g(x) := x - f(x)$ is continuous, and $g(0)<0$ and $g(1)>0$. By the
+		Intermediate Value Theorem, there must be some $x \in [0,1]$ for which
+		$g(x) = 0$. Hence $x = f(x)$.
+	\end{proof}
+
+	\begin{proof}[Proof \emph{(for d=2)}]
+		The function $f$ sends point $(\alpha, \beta, \gamma)$ to another point
+		in the triangle: $f(\alpha, \beta, \gamma) = (\conj{\alpha},
+		\conj{\beta}, \conj{\gamma})$. We begin the proof by defining a valid
+		colouring of $S^2$ based on $f$:
+		\begin{itemize}
+			\item R if $\alpha > \conj{\alpha}$
+			\item B if $\alpha \le \conj{\alpha}$ and $\beta > \conj{\beta}$
+			\item G if $\alpha \le \conj{\alpha}$ and $\beta \le \conj{\beta}$
+				and $\gamma < \conj{\gamma}$
+		\end{itemize}
+
+		\begin{fact}
+			If a point has no colour, then it is a fixed point.
+		\end{fact}
+
+		\begin{claim*}
+			The colouring is valid.
+		\end{claim*}
+		\begin{subproof}
+			Recall that a colouring is valid if each of the three vertices of a
+			triangle receives a different colour and no point on the side is
+			assigned the colour equal to the colour on the opposite corner. The
+			colours of the points $(1,0,0), (0,1,0),$ and $(0,0,1)$ are R, B,
+			and G respectively. Furthermore,
+			\begin{itemize}
+				\item no point on the $(1,0,0)-(0,1,0)$ edge has colour G
+				\item no point on the $(0,0,1)-(1,0,0)$ edge has colour B
+				\item no point on the $(0,1,0)-(0,0,1)$ edge has colour R
+			\end{itemize}
+		\end{subproof}
+
+		We then use Sperner's Lemma and the compactness of $S^2$ to find a
+		fixed point. Let $T_1, T_2, \ldots$ be triangulations of $S^2$ such
+		that the largest diameter of the cells converges to 0. By Sperner's
+		Lemma, every $T_i$ has a panchromatic cell with corners:
+		\begin{itemize}
+			\item $x_i = (\alpha_i, \beta_i, \gamma_i)$ with colour R
+			\item $x_i' = (\alpha_i', \beta_i', \gamma_i')$ with colour B
+			\item $x_i'' = (\alpha_i'', \beta_i'', \gamma_i'')$ with colour G
+		\end{itemize}
+
+		In other words, assuming that we have:
+		\begin{equation}
+			\begin{split}
+				f(x_i) & = (\conj{\alpha}_i, \conj{\beta}_i, \conj{\gamma}_i) \\
+				f(x_i') & = (\conj{\alpha}_i', \conj{\beta}_i', \conj{\gamma}_i') \\
+				f(x_i'') & = (\conj{\alpha}_i'', \conj{\beta}_i'', \conj{\gamma}_i'')
+			\end{split}
+		\end{equation}
+
+		Then:
+		\begin{equation}
+			\label{eq:fixedPoints}
+			\begin{split}
+				\alpha_i > \conj{\alpha}_i & \text{ (as $x_i$ is R)} \\
+				\beta_i' > \conj{\beta}_i' & \text{ (as $x_i'$ is B)} \\
+				\gamma_i'' > \conj{\gamma}_i'' & \text{ (as $x_i''$ is G)}
+			\end{split}
+		\end{equation}
+
+		Since $S^2$ is a compact (closed and bounded) subset of $\mathbb{R}^3$,
+		by the Bolzano-Weierstrass Theorem\footnote{Each bounded sequence in
+		$\mathbb{R}^n$ has a convergent subsequence.}, there is a sequence $i_1
+		< i_2 < \ldots$ such that $\lim_{k \rightarrow \infty} x_{i_k}$ exists
+		(the sequence $\langle x_{i_k} \rangle$ converges).
+
+		Since the diameters of the cells in triangulations $T_{i_1}, T_{i_2},
+		\ldots$ converges to 0, we have $\lim_{k \rightarrow \infty} x_{i_k} =
+		\lim_{k \rightarrow \infty} x_{i_k}' = \lim_{k \rightarrow \infty}
+		x_{i_k}''$. Let $z = (\alpha, \beta, \gamma)$ and $f(z) =
+		(\conj{\alpha}, \conj{\beta}, \conj{\gamma})$.
+		Using~\eqref{eq:fixedPoints}, we have $\alpha \ge \conj{\alpha}, \beta
+		\ge \conj{\beta}, \gamma \ge \conj{\gamma}$. Thus it follows that
+		$\alpha = \conj{\alpha}, \beta = \conj{\beta}, \gamma = \conj{\gamma}$
+		since $\alpha + \beta + \gamma = 1$ and $\conj{\alpha} + \conj{\beta} +
+		\conj{\gamma}$, so we have $f(z) = z$, a fixed point.
+	\end{proof}
+
+	\begin{claim}
+		Brouwer's Theorem can be proved for $d \ge 3$ by induction.
+	\end{claim}
+	\begin{remark}
+		Brouwer's Fixed Point Theorem holds for continuous functions $f:C
+		\rightarrow C$ where $C$ is convex and compact. Any convex compact set
+		can be continuously deformed into $S^d$ for some $d$.
+	\end{remark}
+
+	\subsection{Nash's Theorem}
+	We now prove the big Nash's Theorem for two players by bringing together
+	the previous two results. The proof for $n$ players is a straightforward
+	generalisation. Note that by a finite game, we mean a game in which there
+	is a finite number of players each with a finite number of pure strategies.
+
+	\begin{theorem}[Nash, 1951]
+		Every finite game has a Nash Equilibrium.
+	\end{theorem}
+	\begin{proof}[Proof of Nash's Theorem]
+		Player I has payoff matrix $\vect{A}$ and plays mixed strategy
+		$\vect{x} \in \Delta^{m_1}$, while player II has payoff matrix
+		$\vect{B}$ and plays mixed strategy $\vect{y} \in \Delta^{m_2}$.
+
+		Let $k_i(x,y)$ denote player I's gain in utility from switching to
+		strategy $i \in S_\text{I}$, and $k_j'(x,y)$ denote player II's gain in
+		utility from switching to strategy $j \in S_\text{II}$:
+		\begin{equation}
+			\begin{split}
+				k_i(x,y) & := \max \{ 0, (\vect{Ay})_i - \vect{x^\top A y} \} \\
+				k_j'(x,y) & := \max \{ 0, (\vect{x^\top B})_j - \vect{x^\top A y} \} \\
+			\end{split}
+		\end{equation}
+
+		We are at a Nash Equilibrium when $k_i(x,y) = k_j'(x,y)$ for some
+		strategies $i \in S_\text{I}, j \in S_\text{II}$. Define the following
+		mixed strategy for player I:
+		\begin{equation}
+			g(x,y) := \frac{1}{1 + \sum_{i \in [m_1]} k_i(x,y)} \begin{pmatrix}
+				x_1 + k_1(x,y) \\
+				\vdots \\
+				x_{m_1} + k_{m_1}(x,y)
+			\end{pmatrix}
+		\end{equation}
+
+		And the same for player II:
+		\begin{equation}
+			h(x,y) := \frac{1}{1 + \sum_{j \in [m_2]} k_j'(x,y)} \begin{pmatrix}
+				x_1 + k_1'(x,y) \\
+				\vdots \\
+				x_{m_2} + k_{m_2}'(x,y)
+			\end{pmatrix}
+		\end{equation}
+
+		\begin{claim*}
+			$g(x,y)$ and $h(x,y)$ are valid mixed strategies.
+		\end{claim*}
+		\begin{subproof}
+			We will prove for $g(x,y)$, and the same reasoning applies for
+			$h(x,y)$.  Let $\conj{x} := \begin{pmatrix}
+				x_1 + k_1(x,y) \\
+				\vdots \\
+				x_{m_1} + k_{m_1}(x,y) \\
+			\end{pmatrix}$. In a valid mixed strategy the sum of entries must
+			be equal to 1. We have:
+			\begin{equation*}
+				\begin{split}
+					\sum_i \conj{x}_i & = \sum_i (x_i + k_i(x,y)) = \sum_i x_i +
+					\sum_i k_i(x,y) \\
+					& = 1 + \sum_i k_i(x,y)
+				\end{split}
+			\end{equation*}
+
+			Hence, $\frac{1}{1 + \sum_i k_i(x,y)} \sum_i \conj{x}_i = 1$ and
+			each $\conj{x}_i \ge 0$, since $k_i(x,y) \ge 0$ by definition.
+		\end{subproof}
+
+		Now define the continuous function $f:\Delta^{m_1} \times
+		\Delta^{m_2} \rightarrow \Delta^{m_1} \times \Delta^{m_2}$ as
+		follows:
+		\begin{equation}
+			f(x,y) = (g(x,y), h(x,y))
+		\end{equation}
+
+		Since $\Delta^{m_1} \times \Delta^{m_2}$ is a convex compact set,
+		Brouwer's Theorem implies that $f$ has a fixed point. That is, there is
+		an $x^* \in \Delta^{m_1}$ and a $y^* \in \Delta^{m_2}$ such that
+		$f(x^*,y^*) = (x^*,y^*)$. Now we just need to show that $(x^*,y^*)$ is
+		a Nash Equilibrium.
+
+		\begin{claim*}
+			$(x^*, y^*)$ is a Nash Equilibrium.
+		\end{claim*}
+		\begin{subproof}
+			We must show that for all $i \in [m_1], j \in [m_2], k_i(x^*,y^*) =
+			k_j'(x^*,y^*) = 0$. Assume there is an $i \in [m_1]$ such that
+			$k_i(x^*,y^*) > 0$. Then there must be a $j \in [m_1]$ such that
+			$x_j \neq 0$ and $k_j(x^*, y^*) = 0$. If we suppose that this is
+			not true (i.e. that every $k_j(x^*,y^*) > 0$), then we have:
+			\begin{equation*}
+				\vect{x^\top A y} = \sum_{\ell \in [m_1]} x_\ell
+				(\vect{Ay})_\ell > \sum_{\ell \in [m_1]} x_\ell (\vect{x^\top A
+				y}) = \vect{x^\top A y} \sum_{\ell \in [m_1]} x_\ell =
+				\vect{x^\top A y}
+			\end{equation*}
+
+			A contradiction.
+		\end{subproof}
+
+		Since $(x^*,y^*)$ is a fixed point of $f$, $g(x^*,y^*) = x^*$.
+		Therefore,
+		\begin{equation*}
+			\frac{x^*_i + k_i(x^*, y^*)}{1 + \sum_{\ell \in [m_1]} k_\ell (x^*,
+		y^*)} = x^* \qquad (\neq 0 \text{ as $x^*_i + k_i(x^*, y^*) \neq 0$})
+		\end{equation*}
+
+		Rearranging, we have $\sum_{\ell \in [m_1]} k_l(x^*, y^*) =
+		\dfrac{k_i(x^*, y^*)}{x^*_i} > 0$, but then:
+		\begin{equation*}
+			\begin{split}
+				\frac{x^*_j + k_j(x^*,y^*)}{1 + \sum_{\ell \in [m_1]} k_\ell
+				(x^*, y^*)} & = \frac{x^*_j}{1 + \sum_{\ell \in [m_1]} k_\ell
+				(x^*, y^*)} \\
+				& = \frac{x^*_j}{1 + k_i(x^*,y^*) / x^*_i} \neq x^*_j
+			\end{split}
+		\end{equation*}
+
+		This contradicts the fact that $(x^*,y^*)$ is a fixed point, and hence
+		there is no $i$ such that $k_i(x^*, y^*) = 0$. Similar reasoning shows
+		that $k_j'(x^*,y^*) = 0$ for all $j \in [m_2]$. Therefore no player can
+		improve their expected payoff by switching strategy, so no player the
+		incentive to unilaterally deviate. Thus $(x^*,y^*)$ is a Nash
+		Equilibrium.
+	\end{proof}

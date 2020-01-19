@@ -1,0 +1,72 @@
+\section{PPAD}
+\begin{definition}[Search problem]
+	An algorithmic problem is a total search problem if each instance $x$ has a
+	search space $S_x \subseteq \{0,1\}*$ of bitstrings of length polynomial in
+	$|x|$, as well as a non-empty subset $Q_x$ of valid solutions.
+\end{definition}
+
+Given the input $x$ to some search problem, we wish to find a $y \in Q_x$. For
+example, the computational problem \textsc{Nash} is, given a finite game in
+strategic form and parameter $\varepsilon > 0$, find an
+$\varepsilon$-Nash Equilibrium. By Nash's Theorem, every finite game has a Nash
+Equilibrium, hence every finite game also has an $\varepsilon$-Nash
+Equilibrium.
+
+The problem \textsc{Sperner} is, given a valid colouring of a
+subdivision of a simplex, compute a fully-coloured vertex in such a colouring.
+
+The problem \textsc{$\alpha$-Brouwer} is, given a continuous function $f:S
+\rightarrow S$ from a compact convex set to itself and parameter $\alpha > 0$,
+find an $\alpha$-approximate fixed point of $f$. 
+
+\subsection{\textsc{End-of-a-Line}}
+The problem \textsc{(Explicit) End-of-a-Line} is, given a directed graph
+$G=(V,\vec{E})$ such that every vertex has at most one predecessor and at most
+one successor, and an initial vertex $v_0$ (the \emph{standard source}) with
+in-degree 0 and out-degree 1, find a vertex of out-degree 1 that is not equal
+to $v_0$. Recall that the graph we constructed when computing the number of
+panchromatic triangles is of such a structure. To solve \textsc{Explicit
+End-of-a-Line}, we can simply follow the edges of the graph until we reach a
+sink.
+
+Another formulation of the problem is as follows: we are given a graph
+$G=(V,\vec{E})$ in which vertices are $k$-bit strings (so $|V|\le 2^k$). The
+graph is encoded by two functions $P,S : \{0,1\}^k \rightarrow \{0,1\}^k$ that
+compute a node's predecessor and successor, respectively. That is, there is an
+edge $(u,v)$ if and only if $S(u)=v$, $P(v)=u$, and $v \neq (0,\ldots,0)$. The
+\textsc{End-of-a-Line} problem is to find a node other than $(0,\ldots,0)$ that
+either has a successor but no predecessor or has a predecessor but no
+successor.
+
+Due to a simple parity argument, we know such a node exists -- the problem is
+in finding one. We could just test all nodes in the graph, but since there are
+$2^k$ of them this cannot be done in time polynomial in the size of the input.
+It is not known whether \textsc{End-of-a-Line} can always be solved in
+polynomial time.
+
+\begin{definition}[Polynomial-time reduction]
+	A polynomial-time reduction from a search problem $X$ to search problem $Y$
+	is a pair $(f,g)$ of polynomial-time computable functions such that $f$
+	maps inputs of $X$ to inputs of $Y$, and $g$ maps valid solutions of $Y$ to
+	valid solutions of $X$. We write $X \le_m Y$.
+\end{definition}
+
+For $x \in X$ we have $f(x) \in Y$, and for any solution $y$ of $Y$ for input
+$f(x)$ we have $g(x,y)$ as a solution to $X$ for input $x$.
+
+Informally, the class PPAD (Polynomial Parity Argument (Directed case)) is the
+set of all problems whose solution space can be formulated as the set of all
+sinks and all nonstandard sources in a directed graph with the properties as
+above. Equivalently, PPAD is the class of all search problems $\pi$ such that
+$\pi \le_p$ \textsc{End-of-a-Line}. While PPAD is a good metric for
+intractability, it is a subset of NP and hence ``not as hard''.
+
+\begin{theorem}
+	\textsc{Nash} $\le_p$ \textsc{Brouwer} $\le_p$ \textsc{Sperner} $\le_p$
+	\textsc{End-of-a-Line}
+\end{theorem}
+
+\begin{theorem}[Goldberg, 2006]
+	\textsc{Nash} is PPAD-complete.
+\end{theorem}
+

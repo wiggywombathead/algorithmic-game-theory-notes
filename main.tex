@@ -1,0 +1,82 @@
+\documentclass[10pt,a4paper]{article}
+
+% images
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{subfig}
+
+% reference items
+\usepackage{enumitem}
+
+% links
+\usepackage{url}
+\usepackage{hyperref}
+
+\usepackage{pdfpages}
+\usepackage{pgfplots}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,positioning}
+
+\usepackage{footnote}
+
+% maths
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{dsfont}
+\usepackage{bm}
+
+\usepackage{amsthm}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+
+\newenvironment{subproof}[1][\proofname]{%
+  \renewcommand{\qedsymbol}{$\blacksquare$}%
+  \begin{proof}[#1]%
+}{%
+  \end{proof}%
+}
+
+\newtheorem*{claim*}{Claim}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{remark}{Remark}
+\newtheorem*{fact}{Fact}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+ 
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand*\conj[1]{\overline{#1}}
+\newcommand*\vect[1]{\bm{#1}}
+
+% No section numbering
+% \setcounter{secnumdepth}{0}
+
+\title{\textbf{Notes on Algorithmic Game Theory}}
+\author{Thomas Archbold}
+\date{}
+
+\begin{document}
+\maketitle
+
+\input{01-totc}
+\input{02-strategic-form-games}
+\input{03-nash-equilibria}
+\input{04-vector-matrix-notation}
+\input{05-linear-programming}
+\input{06-two-player-zero-sum-games}
+\input{07-lemke-howson}
+\input{08-nashs-theorem}
+\input{09-complexity-of-finding-equilibria}
+\input{10-ppad}
+\input{11-correlated-equilibria}
+\input{12-auctions}
+\input{13-network-routing}
+
+\end{document}
