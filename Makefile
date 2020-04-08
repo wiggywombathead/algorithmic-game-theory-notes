@@ -8,3 +8,6 @@ OUT = notes
 $(OUT).pdf: $(FILES)
 	$(LATEX) $(MAIN)
 	$(LATEX) $(MAIN)
+
+count:
+	detex $(MAIN) | wc -w

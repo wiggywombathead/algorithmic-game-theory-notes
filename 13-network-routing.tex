@@ -5,38 +5,311 @@ model. Let $G=(V,E)$ be a directed graph with:
 	\item $k$ source-destination pairs $(s_i, t_i)$, each with demand $r_i \in \mathbb{R}_{\ge 0}$.
 	\item latency functions $\ell_e : \mathbb{R}_{\ge 0} \rightarrow
 		\mathbb{R}_{\ge 0}$ for all edges, mapping traffic to latency
-	\item $p_i$, the set of paths from $s_i$ to $t_i$ for each
+	\item $P_i$, the set of paths from $s_i$ to $t_i$ for each
 		source-destination pair
-	\item Let $P := \bigcup^k p_i$
+	\item Let $P := \bigcup^k P_i$
 	\item Flow $f : P \rightarrow \mathbb{R}_{\ge 0}$ such that $\sum_{p \in
 		P_i} f(p) = r_i$
-	\item Flow on edge $e$ $f_e : \sum_{p \in P_i : e \in p} f(p)$
+	\item Flow on edge $e$, $f_e := \sum_{p \in P_i : e \in p} f(p)$
 	\item Latency of path $p$ $L_p (f) := \sum_{e \in p} \ell_e (f_e)$
 	\item Social cost of flow $C(f) = \sum_{p \in P} f(p) \cdot L_p(f) =
 		\sum_{e \in E} f(e) \cdot \ell_e (f_e)$
 \end{itemize}
 
 Consider the following example:
-TODO
+
+TODO: diagram
 
 We have:
 \begin{itemize}
 	\item $\ell_A(x) = x$, $\ell_B(x) = 1$, $\ell_C(x) = 1$, $\ell_D(x) = x$
-	\item $P = p_1 = \{ (A,B), (C,D) \}$
+	\item $P = P_1 = \{ (A,B), (C,D) \}$
 \end{itemize}
 
 Call $(A,B)$ the ``up'' path, and $(C,D)$ the ``down'' path. Consider the flow
 $f$ for $\lambda \in [0,1]$ where $f^\lambda(\text{up}) = \lambda$ and
 $f^\lambda(\text{down}) = 1 - \lambda$. We have the following flows on edges:
 \begin{equation*}
-	\begin{split}
+	\begin{gathered}
 		f_A^\lambda = f_B^\lambda = \lambda \\
 		f_C^\lambda = f_D^\lambda = 1 - \lambda
+	\end{gathered}
+\end{equation*}
+
+The latencies of the paths are:
+\begin{equation*}
+	\begin{gathered}
+		L_\text{up}(f^\lambda) = \ell_A(f_A^\lambda) + \ell_B(f_B^\lambda) = \ell_A(\lambda) + \ell_B(\lambda) = \lambda + 1 \\
+		L_\text{down}(f^\lambda) = \ell_C(f_C^\lambda) + \ell_D(f_D^\lambda) = \ell_C(1 - \lambda) + \ell_D(1 - \lambda) = 1 + 1 - \lambda = 2 - \lambda
+	\end{gathered}
+\end{equation*}
+
+The social cost of flow $f^\lambda$ is hence given by:
+\begin{equation*}
+	\begin{split}
+		C(f^\lambda) & = \sum_{p\in P} f^\lambda (p) \cdot L_p(f^\lambda) \\
+		& = f^\lambda (\text{up}) \cdot L_\text{up} (f^\lambda) + f^\lambda (\text{down}) \cdot L_\text{down}(f^\lambda) \\
+		& = \lambda (1 + \lambda) + (1 - \lambda) (2 - \lambda) \\
+		& = 2(\lambda^2 - \lambda + 1) \\
 	\end{split}
 \end{equation*}
 
-The latencies of the paths are $L_\text{up}(f^\lambda) =
-\ell_A(f_A^\lambda) + \ell_B(f_B^\lambda) = \ell_A(\lambda) + \ell_B(\lambda) =
-\lambda + 1$, and $L_\text{down}(f^\lambda) = \ell_C(f_C^\lambda) +
-\ell_D(f_D^\lambda) = \ell_C(1 - \lambda) + \ell_D(1 - \lambda) = 1 + 1 -
-\lambda = 2 - \lambda$.
+The cost of this flow is minimised by setting $\lambda = 1/2$, which gives a
+social cost of $C(f^\frac{1}{2}) = 2(\frac{1}{2}^2 - \frac{1}{2} + 1) = 3/2$.
+
+\subsection{Non-atomic flow games}
+
+So far there has been no game to play -- we could simply compute the
+cost-minimising flow and route the traffic as such. However, in selfish routing
+we assume that the agents are responsible for routing the traffic, each trying
+to minimise his own latency. In this model, there are:
+\begin{itemize}
+	\item infinitely many player $i \in [0, r]$, each controlling an
+		infinitesimal amount of traffic
+	\item each player aims to minimise their own latency
+\end{itemize}
+
+\textbf{Wardrop's First Principle:} if a route is used, then it is at least as
+good as all other routes (otherwise they would simply take another better
+route).
+
+\begin{definition}[Wardrop Equilibrium]
+	Flow $f$ is a Wardrop Equilibrium (WE) if for every $i \in [k]$, for
+	every pair of paths $p, p' \in P_i$, if $f(p) > 0$ then $L_p(f) \le
+	L_p'(f)$. In other words, whenever there is some flow on some path $p$,
+	then all other alternative paths $p'$ have at least the same latency.
+\end{definition}
+
+\begin{fact}
+	Every flow network has a Wardrop Equilibrium.
+\end{fact}
+
+\subsubsection{Example}
+
+\begin{claim}
+	The only Wardrop Equilibrium in the previous game is the flow
+	$f^\frac{1}{2}$
+\end{claim}
+\begin{proof}
+	First observe that setting $\lambda = 1/2$ is indeed an equilibrium: the
+	flow on the ``up'' path is $\lambda + 1$ = 3/2, equal to the flow on the
+	``down'' path, $2 - \lambda = 3/2$. Therefore no player has the incentive
+	to deviate to the other path, as it would not decrease the latency they
+	experience.
+
+	If $\lambda > 1/2$ then the flow on the upper path is non-zero. But
+	$L_\text{up}(f^\lambda) = 1 + \lambda > 3/2$, while
+	$L_\text{down}(f^\lambda) = 2 - \lambda < 3/2$, so $L_\text{up}(f^\lambda)
+	> L_\text{down}(f^\lambda)$, meaning players on the top path would want to
+	move to the bottom path.
+
+	If $\lambda < 1/2$ then the flow on the bottom path is non-zero. Then we
+	have $L_\text{down}(f^\lambda) > 3/2$ and $L_\text{up}(f^\lambda) < 3/2$,
+	so players on the bottom path would want to switch to the top path. Hence
+	the flow $f^\frac{1}{2}$ is the only equilibrium.
+\end{proof}
+
+\subsubsection{Braess' Paradox}
+
+TODO: diagram
+
+We have installed a bridge $E$ that incurs no latency when travelling over it,
+that is, $\ell_E(x) = 0$.
+
+We have the paths $P = \{ (A,B), (A,E,D), (C,D) \}$ which we will label ``up'',
+``bridge'', and ``down'' respectively. We consider the flow $f^{\conj{\lambda}}
+= f^{\lambda_1, \lambda_2, \lambda_3}$ that sends $\lambda_1$ units of flow
+through the top path, $\lambda_3$ units through the bottom path, and the
+remaining $\lambda_2 = 1 - \lambda_1 - \lambda_3$ units through the bridge
+path. The flows are:
+\begin{equation*}
+	\begin{split}
+		f^{\conj{\lambda}}_A & = \lambda_1 + \lambda_2 \\
+		f^{\conj{\lambda}}_B & = \lambda_1 \\
+		f^{\conj{\lambda}}_C & = \lambda_3 \\
+		f^{\conj{\lambda}}_D & = \lambda_2 + \lambda_3 \\
+		f^{\conj{\lambda}}_E & = \lambda_2 \\
+	\end{split}
+\end{equation*}
+
+The latencies are:
+\begin{equation*}
+	\begin{split}
+		L_\text{up}(f^{\conj{\lambda}}) & = \lambda_1 + \lambda_2 + 1 =
+		2 - \lambda_3 \\
+		L_\text{down}(f^{\conj{\lambda}}) & = 1 + \lambda_2 + \lambda_3 = 2 -
+		\lambda_1 \\
+		L_\text{bridge}(f^{\conj{\lambda}}) & = \lambda_1 + 2\lambda_2 +
+		\lambda_3 = 2 - \lambda_1 - \lambda_3
+	\end{split}
+\end{equation*}
+
+The minimum social cost is again $3/2$, achieved by flow $f^{\frac{1}{2}, 0,
+\frac{1}{2}}$. However, the only Wardrop Equilibrium in this game is the flow
+$f^{0,1,0}$, where everyone uses the zero-cost bridge.
+
+\begin{claim}
+	The only Wardrop Equilibrium in the game is the flow $f^{0,1,0}$.
+\end{claim}
+\begin{proof}
+	The flow $f^{0,1,0}$ is a Wardrop Equilibrium as $L_\text{up}(f^{0,1,0}) =
+	L_\text{down}(f^{0,1,0}) = L_\text{bridge}(f^{0,1,0}) = 2$.
+
+	Now consider the cases where $\lambda_1, \lambda_3 \neq 0$. In either case
+	some flow is sent along the ``bridge'' path. If only $\lambda_1 > 0$:
+	\begin{itemize}
+		\item there is some flow sent along the ``up'' path, and none along the
+			``down'' path
+		\item $L_\text{up}(f^{\conj{\lambda}}) = 2 > 2 - \lambda_1 =
+			L_\text{bridge}(f^{\conj{\lambda}})$
+		\item so players have incentive to deviate to taking the ``bridge''
+			path
+	\end{itemize}
+
+	If only $\lambda_3 > 0$:
+	\begin{itemize}
+		\item there is some flow sent along the ``down'' path, and none along the
+			``up'' path
+		\item $L_\text{down}(f^{\conj{\lambda}}) = 2 > 2 - \lambda_3 =
+			L_\text{bridge}(f^{\conj{\lambda}})$
+		\item so players have incentive to deviate to taking the ``bridge''
+			path
+	\end{itemize}
+
+	If both $\lambda_1, \lambda_3 > 0$, then all paths are used, and
+	$L_\text{bridge}(f^{\conj{\lambda}}) < L_\text{up}(f^{\conj{\lambda}}),
+	L_\text{down}(f^{\conj{\lambda}})$.
+
+	Hence whenever $\lambda_1, \lambda_3 > 0$ players always have an incentive
+	to deviate to the ``bridge'' path. Therefore the only Wardrop Equilibrium
+	is the flow $f^{0,1,0}$.
+
+\end{proof}
+
+\begin{definition}[Price of Anarchy]
+	The Price of Anarchy (POA) of a network $G$ is the maximum ratio of
+	the cost of the worst possible Wardrop flow and the cost of the optimal
+	feasible flow. That is,
+	\begin{equation}
+		POA(G) = \frac{ \max_{f \text{ is WE}} C(f) }{ \min_{f^* \text{ is
+		flow}} C(f^*) }
+	\end{equation}
+\end{definition}
+
+\begin{fact}
+	The Price of Anarchy in Braess' Network is $\frac{2}{3/2} = 4/3$.
+\end{fact}
+
+So the Wardrop Equilibrium flow is $1/3$ worse than the optimal in Braess'
+Network. This example is interesting as it shows that adding links that seem to
+be beneficial may actually degrade performance if the traffic is controlled by
+selfish players. We will now cover an even simpler example where the Price of
+Anarchy can be made arbitrarily bad.
+
+\subsubsection{Pigou's Network}
+
+The latency functions are $\ell_A(x)=x$, $\ell_B(x)=1$. Consider the flow
+\begin{equation*}
+	\begin{split}
+		f^\varepsilon : & \, A \mapsto 1 - \varepsilon \\
+		& B \mapsto \varepsilon
+	\end{split}
+\end{equation*}
+
+No matter the value of $\varepsilon$, everyone always wants to take the top
+path: sending $\varepsilon$ along edge $B$ incurs a latency of 1, but a latency
+of $1-\varepsilon$ along edge $A$. Hence the only Wardrop Equilibrium is $f^0$,
+whose social cost is 1. The minimum social cost is achieved by the flow
+$f^\frac{1}{2}$, which incurs a social cost of $3/4$. Hence the Price of
+Anarchy of the above network is $\frac{1}{3/4} = 4/3$.
+
+Now consider the same network with latency functions $\ell_A(x)=x^d$ for $d \in
+[0,1]$, and $\ell_B(x)=1$. The flow $f^0$ is still the only Wardrop Equilibrium
+with a social cost of $C(f^0) = 1$.
+
+The cost of sending $\varepsilon$ units of flow along $B$ and the remainder
+along $A$ is
+$$C(f^\varepsilon) = (1-\varepsilon)(1-\varepsilon)^d + 1 \cdot \varepsilon =
+\varepsilon + (1-\varepsilon)^{d+1}$$
+
+This is minimised when the derivative is 0:
+\begin{equation*}
+	\begin{split}
+		1 - (d+1)(1-\varepsilon^*)^d & = 0 \\
+		\varepsilon^* = 1 - \frac{1}{\sqrt[d]{d+1}}
+	\end{split}
+\end{equation*}
+
+The cost of this flow is:
+\begin{equation*}
+	\begin{split}
+		C(f^{\varepsilon^*}) & = \varepsilon^* + (1-\varepsilon^*)^{d+1} \\
+		& = 1 - \frac{d}{(d+1)\sqrt[d]{d+1}}
+	\end{split}
+\end{equation*}
+
+As $d \rightarrow \infty$, $C(f^{\varepsilon^*}) \rightarrow 0$. Therefore the
+Price of Anarchy ($\frac{\text{stable}}{\text{optimal}}$) is unbounded.
+
+\subsubsection{Pigou Bound}
+
+The latency functions used in Pigou's example are very steep. Can we derive
+better bounds on the Price of Anarchy by restricting the kind of
+latency functions that are allowed in the network?
+
+\begin{definition}[Pigou Bound]
+	Let $\mathcal{C}$ be a set of latency functions. The Pigou Bound
+	$\pi(\mathcal{C})$ is defined as follows:
+	\begin{equation}
+		\pi(\mathcal{C}) = \sup_{\ell \in \mathcal{C}} \sup_{\varepsilon \in
+		[0, r]}
+		\frac{r \cdot \ell(r)}{\varepsilon \cdot \ell(\varepsilon) +
+		(r-\varepsilon) \cdot \ell(r)}
+	\end{equation}
+\end{definition}
+
+This value is the worst Price of Anarchy possible in a network with two
+parallel edges, one with a constant latency function and the other with a
+latency function drawn from a set $\mathcal{C}$. The idea is to take the worst
+possible latency function $\ell \in \mathcal{C}$ and the worst possible demand
+$r$. One of the two edges has constant latency equal to $\ell(r)$, and the
+other's latency is given by the latency function $\ell$.
+
+TODO: diagram
+
+\begin{theorem}
+	If a class $\mathcal{C}$ of latency functions contains all constant
+	functions, then $POA(\mathcal{C}) \le \pi(\mathcal{C})$.
+\end{theorem}
+
+Recall that the Price of Anarchy can be made arbitrarily large, i.e.
+$POA(\mathcal{C}) \ge \pi(\mathcal{C})$
+
+\begin{corollary}
+	The worst POA in Pigou's Network is equal to the worst POA in all graphs.
+\end{corollary}
+
+\begin{theorem}[Variational Inequality Characterisation]
+	The flow $f$ is a Wardrop Equilibrium iff for every feasible flow $f^*$ we
+	have:
+	\begin{equation}
+		\sum_{e \in E} f_e \cdot \ell_e(f_e) \le \sum_{e \in E} f^*_e \cdot
+		l_e(f_e)
+	\end{equation}
+
+	That is, the social cost of $f$ is at most the social cost of $f^*$ in the
+	network where each edge has constant latency function $\ell_e(f_e)$.
+\end{theorem}
+\begin{proof}
+	Begin by writing the right hand side of the inequality in terms of paths
+	rather than edges and define $H_f(f^*)$ as:
+	\begin{equation*}
+		\begin{split}
+			H_f(f^*) & = \sum_{e \in E} f^*_e \cdot \ell_e(f_e) \\
+			& = \sum_{i \in [k]} \sum_{p \in P_i} f^*(p) \cdot L_p(f)
+		\end{split}
+	\end{equation*}
+
+	Note that the right hand side is equal to $H_f(f^*)$ while the left hand
+	side is equal to $H_f(f)$.
+\end{proof}
