@@ -1,422 +1,415 @@
 \section{Auctions}
-	\subsection{Single-Item Auctions}
-	In a single-item auction there are:
-	\begin{itemize}
-		\itemsep0em 
-		\item 1 item
-		\item $n$ bidders interested in acquiring the item
-		\item a private valuation $v_i \in \mathbb{R}$ for obtaining the item
-	\end{itemize}
 
-	The goal is to give the item to the bidder with the highest valuation for
-	it. As a first attempt at designing such a mechanism, we simply ask each
-	bidder for their bid $b_i \in \mathbb{R}$ and give the item to the bidder
-	who bids the highest. Note that since $v_i$ is private, bidders have the
-	option to act untruthfully. This is a poor mechanism as it can be
-	manipulated -- bidders may bid arbitrarily high and are not incentivised to
-	report their true valuations.
+\subsection{Single-Item Auctions}
 
-	For our second attempt, we consider the First-Price Auction: first, ask the
-	bidders to submit a bid $b_i$, give the item to the bidder with the highest
-	bid and make them pay this bid. Bidders have \emph{quasi-linear utility},
-	so if the item is awarded to bidder $i$ they receive utility $u_i = v_i -
-	b_i$, while everyone else gets 0. This mechanism stops players bidding
-	arbitrarily high, as their is the risk they actually have to pay that bid.
-	However, the mechanism can still be manipulated -- the winner has the
-	incentive to bid $v_j + \varepsilon$, where $v_j$ is the second highest
-	valuation. This would net them utility $v_i - (v_j + \varepsilon) = v_i -
-	v_j - \varepsilon > 0$.
+In a single-item auction there are:
 
-	\subsubsection{Vickrey's Mechanism}
-		Vickrey's mechanism works as follows:
+\begin{itemize}
+	\itemsep0em 
+	\item 1 item
+	\item $n$ bidders interested in acquiring the item
+	\item a private valuation $v_i \in \mathbb{R}$ for obtaining the item
+\end{itemize}
+
+The goal is to give the item to the bidder with the highest valuation for it.
+As a first attempt at designing such a mechanism, we simply ask each bidder for
+their bid $b_i \in \mathbb{R}$ and give the item to the bidder who bids the
+highest. Note that since $v_i$ is private, bidders have the option to act
+untruthfully. This is a poor mechanism as it can be manipulated -- bidders may
+bid arbitrarily high and are not incentivised to report their true valuations.
+
+For our second attempt, we consider the First-Price Auction: first, ask the
+bidders to submit a bid $b_i$, give the item to the bidder with the highest bid
+and make them pay this bid. Bidders have \emph{quasi-linear utility}, so if the
+item is awarded to bidder $i$ they receive utility $u_i = v_i - b_i$, while
+everyone else gets 0. This mechanism stops players bidding arbitrarily high, as
+their is the risk they actually have to pay that bid.  However, the mechanism
+can still be manipulated -- the winner has the incentive to bid $v_j +
+\varepsilon$, where $v_j$ is the second highest valuation. This would net them
+utility $v_i - (v_j + \varepsilon) = v_i - v_j - \varepsilon > 0$.
+
+\subsubsection{Vickrey's Mechanism}
+
+Vickrey's mechanism works as follows:
+
+\begin{itemize}
+	\itemsep0em
+	\item Ask for each player's bid $b_i$
+	\item Make the player $i$ with the highest bid pay the second
+		highest bid $B$ -- the winner gets utility $u_i = v_i - B$,
+		while everyone else gets utility 0.
+\end{itemize}
+
+\begin{theorem}
+	For all bids $b_1, \ldots, b_n$, let $u_i$ be player $i$'s utility if $b_i
+	= v_i$, and $u_i'$ otherwise. Then $u_i \ge u_i'$ i.e.  telling the truth
+	is a dominant strategy.
+\end{theorem}
+
+\begin{proof}
+	Assume $i$ wins by bidding $v_i$ (i.e. by being truthful) and let $B$
+	denote the second highest bid. Then $u_i = v_i - B \ge 0$, as either $i$
+	wins and pays $v_i - B$ where $v_i > B$, or $i$ loses and gets utility 0.
+	Suppose $b_i > B$. Player $i$ still wins and pays the same: $u_i' = v_i -
+	B$, so there is no incentive to overbid. Now suppose that $b_i < B$. $i$
+	would lose, so $u_i' = 0 \le u_i$.
+
+	Now assume $i$ loses by bidding $b_i = v_i$, so $u_i = 0$. Let player $j$
+	be the winner, so $b_j \ge v_i$. For $b_i < b_j$, $i$ still loses, so $u_i'
+	= 0$. For $b_i > b_j$, $i$ wins and pays $b_j$, so $u_i' = v_i - b_j \le
+	0$.
+
+	In all cases, telling the truth by setting $b_i = v_i$ is no worse than
+	attempting to manipulate the mechanism, so truth-telling is a dominant
+	strategy.
+\end{proof}
+
+\begin{definition}[Incentive Compatibility]
+	An auction mechanism is incentive-compatible if bidding their true
+	valuation is a weakly dominant strategy for each bidder.
+\end{definition}
+
+An auction being incentive compatible is a stronger condition than it just
+having a Nash Equilibrium. Vickrey's mechanism is incentive compatible for
+single-item auctions.
+
+\subsection{Combinatorial Auctions}
+
+In a combinatorial auction there is:
+
+\begin{itemize}
+	\itemsep0em
+	\item a set $S$ of items to be sold
+	\item $n$ bidders
+	\item for every bidder $i$ and every subset $S' \subseteq S$,
+		$v_i(S') \in \mathbb{R}$ is the valuation of bidder $i$ for set
+		$S'$
+\end{itemize}
+
+An auction mechanism then:
+
+\begin{itemize}
+	\itemsep0em
+	\item receives bids $b_1, \ldots, b_n : 2^S \rightarrow \mathbb{R}$
+	\item allocates disjoint sets $A_1, \ldots, A_n$ of items to
+		bidders $1, \ldots, n$ (so $A_1, \ldots, A_n \subseteq S, A_i
+		\cap A_j \neq \emptyset$ for $i \neq j$)
+	\item charges bidder $i$ the price $p_i$
+\end{itemize}
+
+Note that the valuations $v_i : 2^S \rightarrow \mathbb{R}$ are objects of size
+exponential in the size of $S$, or the number of items on offer.  We may
+succinctly represent the bidders' valuations by a graph in which bidder $i$
+wants to buy a path from vertex $s_i$ to vertex $t_i$. A path is a set of edges
+$S'$. Consider the valuation:
+
+\begin{equation*}
+	v_i(S') = \begin{cases}
+		\frac{1}{|S'|} & \text{$S'$ is a path from $s_i$ to $t_i$} \\
+		0 & \text{otherwise}
+	\end{cases}
+\end{equation*}
+
+\begin{definition}[Social welfare maximising auction mechanism]
+	An auction mechanism is social welfare maximising if its allocation of
+	items to bidders maximises (over all possible allocations) the social
+	welfare $\sum_{i \in [n]} v_i(A_i)$
+\end{definition}
+
+\subsubsection{VCG mechanism}
+
+The Vickrey-Clarke-Groves mechanism works as follows. It:
+
+\begin{itemize}
+	\item take bids $b_1, \ldots, b_n$
+	\item compute an allocation $A_1, \ldots, A_n$ that maximises
+		$\sum_i b_i(A_i)$ (``believe'' the bidders)
+	\item allocate $A_1, \ldots, A_n$ to bidders $1, \ldots, n$
+	\item for every bidder $k$, compute an allocation $A_1^{-k},
+		\ldots, A_n^{-k}$ (an allocation excluding $k$) that
+		maximises $\sum_{i: i \neq k} b_i(A_i^{-k})$
+	\item charge bidder $k$ the amount $\sum_{i: i \neq k}
+		b_i(A_i^{-k}) - \sum_{i: i \neq k} b_i(A_i)$ (each bidder
+		is charged their \textsc{externality}
+\end{itemize}
+
+An externality is the decline in values of bidders other than $k$ resulting
+from $k$ entering the auction. The amount each bidder is charged $\sum_{i: i
+\neq k} b_i(A_i^{-k}) - \sum_{i: i \neq k} b_i(A_i)$ is a generalisation of
+Vickrey's second price auction.
+
+\subsubsection{Example}
+
+Consider the following auction with 2 items and 4 bidders, with the following
+valuations:
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		& $\{A\}$ & $\{B\}$ & $\{A,B\}$ \\ \hline
+		$b_1$ & 0 & 0 & 5 \\ 
+		$b_2$ & 2 & 0 & 0 \\ 
+		$b_3$ & 0 & 1 & 0 \\ 
+		$b_4$ & 0 & 1 & 1 \\ \hline
+	\end{tabular}
+\end{center}
+
+It is easy to see that the allocation $(A_1, A_2, A_3, A_4) = (\{A,B\},
+\emptyset, \emptyset, \emptyset)$ maximises $\sum_i b_i(A_i)$ (note that social
+welfare and fairness are not necessarily aligned).
+
+Now we calculate the amount that each bidder will be charged.  Since bidder 1
+is the only player receiving any items, they will be the only one charged. Now,
+$\sum_{i: i \neq 1} b_i(A_i) = b_2(A_2) + b_3(A_3) + b_4(A_4) = 0$. Next we
+compute an allocation $(A_2, A_3, A_4)$ that maximises $\sum_{i: i \neq 1}
+b_i(A_i^{-1})$. If we exclude player 1 from the auction, then $(A_2^{-1},
+A_3^{-1}, A_4^{-1}) = (\{A\}, \emptyset, \{B\})$, and $b_2(\{A\}) +
+b_3(\emptyset) + b_4(\{B\}) = 2+0+1 = 3$, so player 1 must pay $\sum_{i: i \neq
+1} b_i(A_i^{-k}) - \sum_{i: i \neq 1} b_i(A_i) = 3 - 0$.
+
+\begin{theorem}
+	The VCG mechanism is incentive compatible and social welfare maximising --
+	making bidders pay their externalities aligns their individual incentives
+	with social welfare maximisation.
+\end{theorem}
+
+\begin{proof}
+	Fix bidder $k$. The utility of bidder $k$ under allocation
+	$A_k$ is:
+	\begin{equation*}
+		u_k(A_k) = v_k(A_k) - \left( \sum_{i: i \neq k}
+		b_i(A_i^{-k}) - \sum_{i: i \neq k} b_i(A_i) \right)
+	\end{equation*}
+
+	Observation: the sum $\sum_{i: i \neq k} b_i(A_i^{-k})$ does not depend on
+	bidder $k$. Hence bidder $k$ wants to maximise $v_k(A_k) + \sum_{i: i \neq
+	k} b_i(A_i)$.
+
+	\begin{claim}
+		Bidding $b_k = v_k$ is a weakly dominant strategy for $k$.
+	\end{claim}
+
+	\begin{subproof}
+		If $k$ bids $b_k = v_k$ hen the VCG mechanism produces the allocation
+		$(A_1, \ldots, A_n)$ that maximises $\sum_i b_i(A_i) = b_k(A_k) +
+		\sum_{i: i \neq k} b_i(A_i) = v_k(A_k) + \sum_{i: i \neq k} b_i(A_i)$.
+		This is equal to the value that $k$ is trying to maximise, hence the
+		VCG mechanism is working in $k$'s favour, so telling the truth will
+		give $k$ the best outcome.
+	\end{subproof}
+
+	The VCG mechanism maximises social welfare by definition.
+\end{proof}
+
+\subsection{VCG mechanism's efficiency}
+
+\subsubsection{Auctions with single-minded bidders}
+
+In a combinatorial auction with single-minded bidders, each bidder is
+interested only in one subset of item. Each bidder therefore needs only to
+submit $(S_i, b_i)$, where $b_i$ is the bid for $S_i \subseteq S$, and $v_i(S')
+= 0$ for all $S' \subseteq S$, $S' \neq S_i$. If bidder $i$ gets assigned its
+desired set $S_i$, it is \emph{a} winner.
+
+Consider the following example with 5 items and 7 single-minded bidders:
+
+\begin{equation*}
+	\begin{split}
+		v_1(\{A,C,D\})   & = 7 \\
+		v_2(\{B,E\})     & = 7 \\
+		v_3(\{C\})       & = 3 \\
+		v_4(\{A,B,C,D\}) & = 9 \\
+		v_5(\{D\})       & = 4 \\
+		v_6(\{A,B,C\})   & = 5 \\
+		v_7(\{B,D\})     & = 5 \\
+	\end{split}
+\end{equation*}
+
+We can allocate the items to players 1 and 2, which allocates all items and
+achieves a social welfare of 14, or to players 2, 3, and 5, which allocates all
+but item $A$ and achieves the same social welfare.
+
+\begin{theorem}
+	Finding an optimal allocation to bidders in the VCG mechanism (even in the
+	case of single-minded bidders) is NP-hard.
+\end{theorem}
+
+First, recall the problems \textsc{MaxIndependentSet}: given a graph $G =
+(V,E)$, we wish to compute a subset of maximum cardinality $S \subseteq V$ such
+that for all $u,v \in V$, $(u,v) \not \in E$.
+
+\begin{proof}
+	We will prove it by constructing a polynomial-time reduction from
+	\textsc{MaxIndependentSet} in graphs. To prove that computing an allocation
+	(\textsc{CAwSMB}) is NP-hard, we have to show that, given an instance of
+	\textsc{MaxIndependentSet}, we can transform it into an instance of our
+	combinatorial auction (i.e., we are showing that \textsc{MaxIndependentSet}
+	$\le^P$ \textsc{CAwSMB}).
+
+	Let $G=(V,E)$ be an undirected graph. Construct a combinatorial auction by
+	setting the bidders as the vertices, edges as the items, and bid for player
+	$i$ as $(\{e \in E \, : \, e$ is incident to $v \}, 1)$.
+
+	A set $W \subseteq V$ is a set of winners iff $W$ is an independent set in
+	$G$. Similarly, a set $W \subseteq V$ is social welfare maximising iff $W$
+	is a maximum independent set. This reduction can obviously be done in
+	polynomial time.
+\end{proof}
+
+The VCG mechanism has good theoretical properties such as dominant strategy
+incentive compatibility, however (as far as we know so far) it is
+computationally intractable. The death blow for the VCG mechanism comes in the
+following theorem.
+
+\begin{theorem}
+	\label{thm:maxIndSetInapproximability}
+	For every small constant $\varepsilon >0$, computing an
+	$|E|^{\frac{1}{2} - \varepsilon}$-approximate (i.e.
+	anything better than $\sqrt{|E|}$) solution of
+	\textsc{MaxIndependentSet} cannot be done in polynomial
+	time, under standard complexity-theoretic assumptions
+	(e.g., that NP $\not \subseteq$ BPP).
+\end{theorem}
+
+The best hope we can have is to design an efficient auction mechanism that
+produces $\sqrt{|S|}$-approximate allocations of items to bidders. If the sizes
+of sets that bidders are interested in is at most 2, then the problem is easy:
+it is simply a matching problem. If they are at least 3 however, hardness kicks
+in and the problem is intractable.
+
+\begin{fact}
+	If we replace optimal allocations in the VCG mechanism by approximate ones
+	then the resulting mechanism is not incentive compatible.
+\end{fact}
+
+\subsection{A greedy mechanism for auctions with single-minded bidders}
+
+In this section we design a greedy mechanism for computing optimal allocations
+for auctions with single-minded bidders. The advantage of such a mechanism is
+that it is computationally efficient, incentive compatible. A possible drawback
+is that it ``only'' computes a $\sqrt{|S|}$-approximate social welfare
+maximising allocation.
+
+An auction mechanism is \emph{monotone} if any bidder who bids $(S_i, b_i)$ and
+wins (i.e. is allocated $S_i$) also wins if they bid $(A, w)$, with $A
+\subseteq S_i$ and $w \ge b_i$ (they win if they bid more for less).
+
+\begin{definition}[Critical value pricing]
+	In a mechanism with critical value pricing, a winner $i$ who bids $(S_i,
+	b_i)$ pays the minimum price needed to win (the infimum of all $w$ such
+	that the bid $(S_i, w)$ would also win).
+\end{definition}
+
+\begin{lemma}
+	\label{lem:singleMindedDSIC}
+	A mechanism for auctions with single-minded bidders in which losers pay 0
+	is incentive compatible iff it is monotone and it uses critical value
+	pricing.
+\end{lemma}
+
+The greedy mechanism:
+\begin{itemize}
+	\item Winner determination:
 		\begin{itemize}
-			\itemsep0em
-			\item Ask for each player's bid $b_i$
-			\item Make the player $i$ with the highest bid pay the second
-				highest bid $B$ -- the winner gets utility $u_i = v_i - B$,
-				while everyone else gets utility 0.
+			\item Sort bids and rename such that
+				$\frac{b_1}{\sqrt{|S_1|}} \ge \ldots \ge
+				\frac{b_n}{\sqrt{|S_n|}}$
+			\item initialise $W \leftarrow \emptyset$
+			\item for $i = 1, \ldots, n$, if $S_i \cap (\bigcup_{j \in W} S_j)
+				= \emptyset$, then $W = W \cup \{i\}$ (i.e. if all
+				of $i$'s desired items are available)
 		\end{itemize}
-
-		\begin{theorem}
-			For all bids $b_1, \ldots, b_n$, let $u_i$ be player $i$'s utility
-			if $b_i = v_i$, and $u_i'$ otherwise. Then $u_i \ge u_i'$ i.e.
-			telling the truth is a dominant strategy.
-		\end{theorem}
-		\begin{proof}
-			Assume $i$ wins by bidding $v_i$ (i.e. by being truthful) and let
-			$B$ denote the second highest bid. Then $u_i = v_i - B \ge 0$, as
-			either $i$ wins and pays $v_i - B$ where $v_i > B$, or $i$ loses
-			and gets utility 0. Suppose $b_i > B$. Player $i$ still wins and
-			pays the same: $u_i' = v_i - B$, so there is no incentive to
-			overbid. Now suppose that $b_i < B$. $i$ would lose, so $u_i' = 0
-			\le u_i$.
-
-			Now assume $i$ loses by bidding $b_i = v_i$, so $u_i = 0$. Let
-			player $j$ be the winner, so $b_j \ge v_i$. For $b_i < b_j$, $i$
-			still loses, so $u_i' = 0$. For $b_i > b_j$, $i$ wins and pays
-			$b_j$, so $u_i' = v_i - b_j \le 0$.
-
-			In all cases, telling the truth by setting $b_i = v_i$ is no worse
-			than attempting to manipulate the mechanism, so truth-telling is a
-			dominant strategy.
-		\end{proof}
-
-		\begin{definition}[Incentive Compatibility]
-			An auction mechanism is incentive-compatible if bidding their true
-			valuation is a weakly dominant strategy for each bidder.
-		\end{definition}
-
-		An auction being incentive compatible is a stronger condition than it
-		just having a Nash Equilibrium. Vickrey's mechanism is incentive
-		compatible for single-item auctions.
-	
-	\subsection{Combinatorial Auctions}
-		In a combinatorial auction there is:
+	\item Critical value pricing
 		\begin{itemize}
-			\itemsep0em
-			\item a set $S$ of items to be sold
-			\item $n$ bidders
-			\item for every bidder $i$ and every subset $S' \subseteq S$,
-				$v_i(S') \in \mathbb{R}$ is the valuation of bidder $i$ for set
-				$S'$
+			\item winner $i$ pays $\frac{v_j}{\sqrt{|S_j|/|S_i|}}$,
+				where $j$ is the smallest index greater than $i$ such
+				that for all $k < j$, either $k=i$ or $S_k \cap S_j =
+				\emptyset$
+			\item winner $i$ pays 0 if no such $j$ exists
 		\end{itemize}
+\end{itemize}
 
-		An auction mechanism then:
-		\begin{itemize}
-			\itemsep0em
-			\item receives bids $b_1, \ldots, b_n : 2^S \rightarrow \mathbb{R}$
-			\item allocates disjoint sets $A_1, \ldots, A_n$ of items to
-				bidders $1, \ldots, n$ (so $A_1, \ldots, A_n \subseteq A_i \cap
-				A_j \neq \emptyset$ for $i \neq j$)
-			\item charges bidder $i$ the price $p_i$
-		\end{itemize}
+The above winner-determination rule is monotone as increasing bid $b_i$ or
+decreasing $S_i$ will make the ratio $\frac{b_i}{\sqrt{|S_i|}}$ larger.
+Similarly, the payment rule indeed uses critical-value pricing as $i$ wins iff
+$i$ appears before $j$.
 
-		Note that the valuations $v_i : 2^S \rightarrow \mathbb{R}$ are objects
-		of size exponential in the size of $S$, or the number of items on
-		offer.
-		We may succinctly represent the bidders' valuations by a graph in which
-		bidder wants to buy a path from vertex $s_i$ to vertex $t_i$. A path is
-		a set of edges $S'$. Consider the valuation
+\begin{theorem}
+	The greedy mechanism is incentive compatible and produces a
+	$\sqrt{|S|}$-approximation allocation w.r.t. social welfare.
+\end{theorem}
+
+\begin{proof}
+	The mechanism's incentive compatibility follows from
+	Lemma~\ref{lem:singleMindedDSIC}, which states that a mechanism for
+	auctions with single-minded bidders in which losers pay 0 is DSIC iff it is
+	monotone and it uses critical-value pricing.  To prove the approximation
+	bound, we want to show:
+
+	\begin{equation*}
+		\sum_{i \in W^*} v_i \le \sum_{i \in W} v_i
+	\end{equation*}
+
+	where $W^*$ is the set of winners in the welfare-maximising solution, and
+	$W$ is the set of winners produced by the greedy solution.
+
+	Let $W^*_i = \{ j \in W^*, j \ge i \, : \, S_i \cap S_j \neq \emptyset \}$,
+	i.e. bidders that win in an optimal allocation but cannot in the greedy
+	auction as their desired set conflicts with that of bidder $i$, who appears
+	before them. For $j \in W^*_i$, we have $b_j \le \sqrt{|S_j|} \cdot
+	\frac{b_i}{\sqrt{|S_i|}}$. Hence,
+
+	\begin{equation*}
+		\sum_{j \in W^*_i} b_j \le \frac{b_i}{\sqrt{|S_i|}} \cdot
+		\sum_{j \in W^*_i} \sqrt{|S_j|}
+	\end{equation*}
+
+	\begin{claim}
+		$\sum_{j \in W^*_i} \sqrt{|S_j|} \le \sqrt{|S_i|} \cdot
+		\sqrt{|S|}$
+	\end{claim}
+
+	\begin{subproof}
+		The Cauchy-Schwarz inequality states that $(\sum_{k=1} x_k y_k)^2 \le
+		\sum_k x_k^2 \cdot \sum_k y_k^2$. Choosing $x_k = 1$ and $y_k =
+		\sqrt{|S_k|}$, we get
+
 		\begin{equation*}
-			v_i(S') = \begin{cases}
-				\frac{1}{|S'|} & \text{$S'$ is a path from $s_i$ to $t_i$} \\
-				0 & \text{otherwise}
-			\end{cases}
+			(\sum_{k=1} \sqrt{|S_k|})^2 \le |W^*_i| \cdot \sum_{j
+			\in W^*_i} |S_j|
 		\end{equation*}
 
-		\begin{definition}[Social welfare maximising auction mechanism]
-			An auction mechanism is social welfare maximising if its allocation
-			of items to bidders maximises (over all possible allocations) the
-			social welfare $\sum_{i \in [n]} v_i(A_i)$
-		\end{definition}
+		Taking the square root of both sides gives us
+		\begin{equation*}
+			\sum_{k=1} \sqrt{|S_k|} \le \sqrt{|W^*_i|} \cdot
+			\sqrt{\sum_{j \in W^*_i} |S_j|}
+		\end{equation*}
 
-		\subsubsection{VCG mechanism}
-			The Vickrey-Clarke-Groves mechanism works as follows. It:
-			\begin{itemize}
-				\item take bids $b_1, \ldots, b_n$
-				\item compute an allocation $A_1, \ldots, A_n$ that maximises
-					$\sum_i b_i(A_i)$ (``believe'' the bidders)
-				\item allocate $A_1, \ldots, A_n$ to bidders $1, \ldots, n$
-				\item for every bidder $k$, compute an allocation $A_1^{-k},
-					\ldots, A_n^{-k}$ (an allocation excluding $k$) that
-					maximises $\sum_{i: i \neq k} b_i(A_i^{-k})$
-				\item charge bidder $k$ the amount $\sum_{i: i \neq k}
-					b_i(A_i^{-k}) - \sum_{i: i \neq k} b_i(A_i)$ (each bidder
-					is charged their \textsc{externality}
-			\end{itemize}
+		Observe that $|W^*_i| \le |S_i|$, as for every $j \in W^*_i$, $S_j$
+		intersects $S_i$ and all of these intersections are disjoint. We also
+		have $\sum_{j \in W^*_i} |S_j| \le |S|$.
+	\end{subproof}
 
-			An externality is the decline in values of bidders other than $k$
-			resulting from $k$ entering the auction. The amount each bidder is
-			charged $\sum_{i: i \neq k} b_i(A_i^{-k}) - \sum_{i: i \neq k}
-			b_i(A_i)$ is a generalisation of Vickrey's second price auction.
+	Using this claim and summing over all $i \in W$, we get
+	\begin{equation*}
+		\begin{split}
+			\sum_{i \in W} \sum_{j \in W^*_i} b_j & \le \sum_{i \in W}
+			\frac{b_i}{\sqrt{|S_i|}} \cdot \sum_{j \in W^*_i}
+			\sqrt{|S_j|} \\
+			& \le \sum_{i \in W} \frac{b_i}{\sqrt{|S_i|}}
+			\cdot \sqrt{|S_i|} \cdot \sqrt{|S|} \\
+			& \le \sqrt{|S|} \cdot \sum_{i \in W} b_i
+		\end{split}
+	\end{equation*}
 
-			\subsubsection{Example}
-				Consider the following auction with 2 items and 4 bidders, with
-				the following valuations:
-				\begin{center}
-					\begin{tabular}{|c|c|c|c|}
-						\hline
-						& $\{A\}$ & $\{B\}$ & $\{A,B\}$ \\ \hline
-						$b_1$ & 0 & 0 & 5 \\ 
-						$b_2$ & 2 & 0 & 0 \\ 
-						$b_3$ & 0 & 1 & 0 \\ 
-						$b_4$ & 0 & 1 & 1 \\ \hline
-					\end{tabular}
-				\end{center}
+	As $W^* \subseteq \bigcup_{i \in W} W^*_i$, we have that $\sum_{i \in W}
+	\sum_{j \in W^*_i} b_j$ is an upper bound of the optimal solution welfare.
+\end{proof}
 
-				It is easy to see that the allocation $(A_1, A_2, A_3, A_4) =
-				(\{A,B\}, \emptyset, \emptyset, \emptyset)$ maximises $\sum_i
-				b_i(A_i)$ (note that social welfare and fairness are not
-				necessarily aligned).
-
-				Now we calculate the amount that each bidder will be charged.
-				Since bidder 1 is the only player receiving any items, they
-				will be the only one charged. Now, $\sum_{i: i \neq 1} b_i(A_i)
-				= b_2(A_2) + b_3(A_3) + b_4(A_4) = 0$. Next we compute an
-				allocation $(A_2, A_3, A_4)$ that maximises $\sum_{i: i \neq 1}
-				b_i(A_i^{-1})$. If we exclude player 1 from the auction, then
-				$(A_2^{-1}, A_3^{-1}, A_4^{-1}) = (\{A\}, \emptyset, \{B\})$,
-				and $b_2(\{A\}) + b_3(\emptyset) + b_4(\{B\}) = 2+0+1 = 3$, so
-				player 1 must pay $\sum_{i: i \neq 1} b_i(A_i^{-k}) - \sum_{i:
-				i \neq 1} b_i(A_i) = 3 - 0$.
-
-				\begin{theorem}
-					The VCG mechanism is incentive compatible and social
-					welfare maximising -- making bidders pay their
-					externalities aligns their individual incentives with
-					social welfare maximisation.
-				\end{theorem}
-
-				\begin{proof}
-					Fix bidder $k$. The utility of bidder $k$ under allocation
-					$A_k$ is:
-					\begin{equation*}
-						u_k(A_k) = v_k(A_k) - \left( \sum_{i: i \neq k}
-						b_i(A_i^{-k}) - \sum_{i: i \neq k} b_i(A_i) \right)
-					\end{equation*}
-
-					Observation: the sum $\sum_{i: i \neq k} b_i(A_i^{-k})$
-					does not depend on bidder $k$. Hence bidder $k$ wants to
-					maximise $v_k(A_k) + \sum_{i: i \neq k} b_i(A_i)$.
-
-					\begin{claim}
-						Bidding $b_k = v_k$ is a weakly dominant strategy for
-						$k$.
-					\end{claim}
-					\begin{subproof}
-						If $k$ bids $b_k = v_k$ hen the VCG mechanism produces
-						the allocation $(A_1, \ldots, A_n)$ that maximises
-						$\sum_i b_i(A_i) = b_k(A_k) + \sum_{i: i \neq k}
-						b_i(A_i) = v_k(A_k) + \sum_{i: i \neq k} b_i(A_i)$.
-						This is equal to the value that $k$ is trying to
-						maximise, hence the VCG mechanism is working in $k$'s
-						favour, so telling the truth will give $k$ the best
-						outcome.
-					\end{subproof}
-
-					The VCG mechanism maximises social welfare by definition.
-				\end{proof}
-
-		\subsection{VCG mechanism's efficiency}
-			\subsubsection{Auctions with single-minded bidders}
-				In a combinatorial auction with single-minded bidders, each
-				bidder is interested only in one subset of item. Each bidder
-				therefore needs only to submit $(S_i, b_i)$, where $b_i$ is the
-				bid for $S_i \subseteq S$, and $v_i(S') = 0$ for all $S'
-				\subseteq S$, $S' \neq S_i$. If bidder $i$ gets assigned its
-				desired set $S_i$, it is \emph{a} winner.
-
-				Consider the following example with 5 items and 7 single-minded
-				bidders:
-				\begin{equation*}
-					\begin{split}
-						v_1(\{A,C,D\})   & = 7 \\
-						v_2(\{B,E\})     & = 7 \\
-						v_3(\{C\})       & = 3 \\
-						v_4(\{A,B,C,D\}) & = 9 \\
-						v_5(\{D\})       & = 4 \\
-						v_6(\{A,B,C\})   & = 5 \\
-						v_7(\{B,D\})     & = 5 \\
-					\end{split}
-				\end{equation*}
-
-				We can allocate the items to players 1 and 2, which allocates
-				all items and achieves a social welfare of 14, or to players 2,
-				3, and 5, which allocates all but item $A$ and achieves the
-				same social welfare.
-
-				\begin{theorem}
-					Finding an optimal allocation to bidders in the VCG
-					mechanism (even in the case of single-minded bidders) is
-					NP-hard.
-				\end{theorem}
-
-				First, recall the problems \textsc{MaxIndependentSet}: given a
-				graph $G = (V,E)$, we wish to compute a subset of maximum
-				cardinality $S \subseteq V$ such that for all $u,v \in V$,
-				$(u,v) \not \in E$.
-
-				\begin{proof}
-					We will prove it by constructing a polynomial-time
-					reduction from \textsc{MaxIndependentSet} in graphs. To
-					prove that computing an allocation (\textsc{CAwSMB}) is
-					NP-hard, we have to show that, given an instance of
-					\textsc{MaxIndependentSet}, we can transform it into an
-					instance of our combinatorial auction (i.e., we are showing
-					that \textsc{MaxIndependentSet} $\le^P$ \textsc{CAwSMB}).
-
-					Let $G=(V,E)$ be an undirected graph. Construct a
-					combinatorial auction by setting the bidders as the
-					vertices, edges as the items, and bid for player $i$ as
-					$(\{e \in E \, : \, e$ is incident to $v \}, 1)$.
-
-					A set $W \subseteq V$ is a set of winners iff $W$ is an
-					independent set in $G$. Similarly, a set $W \subseteq V$ is
-					social welfare maximising iff $W$ is a maximum independent
-					set. This reduction can obviously be done in polynomial
-					time.
-				\end{proof}
-
-				The VCG mechanism has good theoretical properties such as
-				dominant strategy incentive compatibility, however (as far as
-				we know so far) it is computationally intractable. The death
-				blow for the VCG mechanism comes in the following theorem.
-
-				\begin{theorem}
-					\label{thm:maxIndSetInapproximability}
-					For every small constant $\varepsilon >0$, computing an
-					$|E|^{\frac{1}{2} - \varepsilon}$-approximate (i.e.
-					anything better than $\sqrt{|E|}$) solution of
-					\textsc{MaxIndependentSet} cannot be done in polynomial
-					time, under standard complexity-theoretic assumptions
-					(e.g., that NP $\not \subseteq$ BPP).
-				\end{theorem}
-
-				The best hope we can have is to design an efficient auction
-				mechanism that produces $\sqrt{|S|}$-approximate allocations of
-				items to bidders. If the sizes of sets that bidders are
-				interested in is at most 2, then the problem is easy: it is
-				simply a matching problem. If they are at least 3 however,
-				hardness kicks in and the problem is intractable.
-
-				\begin{fact}
-					If we replace optimal allocations in the VCG mechanism by
-					approximate ones then the resulting mechanism is not
-					incentive compatible.
-				\end{fact}
-
-		\subsection{A greedy mechanism for auctions with single-minded bidders}
-			In this section we design a greedy mechanism for computing optimal
-			allocations for auctions with single-minded bidders. The advantage
-			of such a mechanism is that it is computationally efficient,
-			incentive compatible. A possible drawback is that it ``only''
-			computes a $\sqrt{|S|}$-approximate social welfare maximising
-			allocation.
-
-			An auction mechanism is \emph{monotone} if any bidder who bids
-			$(S_i, b_i)$ and wins (i.e. is allocated $S_i$) also wins if they
-			bid $(A, w)$, with $A \subseteq S_i$ and $w \ge b_i$ (they win if
-			they bid more for less).
-
-			\begin{definition}[Critical value pricing]
-				In a mechanism with critical value pricing, a winner $i$ who
-				bids $(S_i, b_i)$ pays the minimum price needed to win (the
-				infimum of all $w$ such that the bid $(S_i, w)$ would also
-				win).
-			\end{definition}
-
-			\begin{lemma}
-				\label{lem:singleMindedDSIC}
-				A mechanism for auctions with single-minded bidders in which
-				losers pay 0 is incentive compatible iff it is monotone and it
-				uses critical value pricing.
-			\end{lemma}
-
-			The greedy mechanism:
-			\begin{itemize}
-				\item Winner determination:
-				\begin{itemize}
-						\item Sort bids and rename such that
-							$\frac{b_1}{\sqrt{|S_1|}} \ge \ldots \ge
-							\frac{b_n}{\sqrt{|S_n|}}$
-						\item initialise $W \leftarrow \emptyset$
-						\item for $i = 1, \ldots, n$, if $S_i \cap (\bigcup_{j \in W} S_j)
-							= \emptyset$, then $W = W \cup \{i\}$ (i.e. if all
-							of $i$'s desired items are available)
-				\end{itemize}
-			\item Critical value pricing
-				\begin{itemize}
-					\item winner $i$ pays $\frac{v_j}{\sqrt{|S_j|/|S_i|}}$,
-						where $j$ is the smallest index greater than $i$ such
-						that for all $k < j$, either $k=i$ or $S_k \cap S_j =
-						\emptyset$
-					\item winner $i$ pays 0 if no such $j$ exists
-				\end{itemize}
-			\end{itemize}
-
-			The above winner-determination rule is monotone as increasing bid
-			$b_i$ or decreasing $S_i$ will make the ratio
-			$\frac{b_i}{\sqrt{|S_i|}}$ larger. Similarly, the payment rule
-			indeed uses critical-value pricing as $i$ wins iff $i$ appears
-			before $j$.
-
-			\begin{theorem}
-				The greedy mechanism is incentive compatible and produces a
-				$\sqrt{|S|}$-approximation allocation w.r.t. social welfare.
-			\end{theorem}
-
-			\begin{proof}
-				The mechanism's incentive compatibility follows from
-				Lemma~\ref{lem:singleMindedDSIC}, which states that a mechanism
-				for auctions with single-minded bidders in which losers pay 0
-				is DSIC iff it is monotone and it uses critical-value pricing.
-				To prove the approximation bound, we want to show:
-				\begin{equation*}
-					\sum_{i \in W^*} v_i \le \sum_{i \in W} v_i
-				\end{equation*}
-
-				where $W^*$ is the set of winners in the welfare-maximising
-				solution, and $W$ is the set of winners produced by the greedy
-				solution.
-
-				Let $W^*_i = \{ j \in W^*, j \ge i \, : \, S_i \cap S_j \neq
-				\emptyset \}$, i.e. bidders that win in an optimal allocation
-				but cannot in the greedy auction as their desired set conflicts
-				with that of bidder $i$, who appears before them. For $j \in
-				W^*_i$, we have $b_j \le \sqrt{|S_j|} \cdot
-				\frac{b_i}{\sqrt{|S_i|}}$. Hence,
-				\begin{equation*}
-					\sum_{j \in W^*_i} b_j \le \frac{b_i}{\sqrt{|S_i|}} \cdot
-					\sum_{j \in W^*_i} \sqrt{|S_j|}
-				\end{equation*}
-
-				\begin{claim}
-					$\sum_{j \in W^*_i} \sqrt{|S_j|} \le \sqrt{|S_i|} \cdot
-					\sqrt{|S|}$
-				\end{claim}
-				\begin{subproof}
-					The Cauchy-Schwarz inequality states that $(\sum_{k=1} x_k
-					y_k)^2 \le \sum_k x_k^2 \cdot \sum_k y_k^2$. Choosing $x_k
-					= 1$ and $y_k = \sqrt{|S_k|}$, we get
-					\begin{equation*}
-						(\sum_{k=1} \sqrt{|S_k|})^2 \le |W^*_i| \cdot \sum_{j
-						\in W^*_i} |S_j|
-					\end{equation*}
-
-					Taking the square root of both sides gives us
-					\begin{equation*}
-						\sum_{k=1} \sqrt{|S_k|} \le \sqrt{|W^*_i|} \cdot
-						\sqrt{\sum_{j \in W^*_i} |S_j|}
-					\end{equation*}
-
-					Observe that $|W^*_i| \le |S_i|$, as for every $j \in
-					W^*_i$, $S_j$ intersects $S_i$ and all of these
-					intersections are disjoint. We also have $\sum_{j \in
-					W^*_i} |S_j| \le |S|$.
-				\end{subproof}
-
-				Using this claim and summing over all $i \in W$, we get
-				\begin{equation*}
-					\begin{split}
-						\sum_{i \in W} \sum_{j \in W^*_i} b_j & \le \sum_{i \in W}
-						\frac{b_i}{\sqrt{|S_i|}} \cdot \sum_{j \in W^*_i}
-						\sqrt{|S_j|} \\
-						& \le \sum_{i \in W} \frac{b_i}{\sqrt{|S_i|}}
-						\cdot \sqrt{|S_i|} \cdot \sqrt{|S|} \\
-						& \le \sqrt{|S|} \cdot \sum_{i \in W} b_i
-					\end{split}
-				\end{equation*}
-
-				As $W^* \subseteq \bigcup_{i \in W} W^*_i$, we have that
-				$\sum_{i \in W} \sum_{j \in W^*_i} b_j$ is an upper bound of
-				the optimal solution welfare.
-			\end{proof}
-
-			We conclude that the greedy auction mechanism is incentive
-			compatible and approximates the optimal social welfare within a
-			factor of $\sqrt{|S|}$. Since computing an allocation of items to
-			bidders that gives a $|S|^{\frac{1}{2} -
-			\varepsilon}$-approximation in polynomial time under reasonable
-			complexity theoretic assumptions is not possible by
-			Theorem~\ref{thm:maxIndSetInapproximability}, this is essentially
-			the best bound we can hope for.
+We conclude that the greedy auction mechanism is incentive compatible and
+approximates the optimal social welfare within a factor of $\sqrt{|S|}$. Since
+computing an allocation of items to bidders that gives a $|S|^{\frac{1}{2} -
+\varepsilon}$-approximation in polynomial time under reasonable complexity
+theoretic assumptions is not possible by
+Theorem~\ref{thm:maxIndSetInapproximability}, this is essentially the best
+bound we can hope for.

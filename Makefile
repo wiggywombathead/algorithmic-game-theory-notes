@@ -1,13 +1,11 @@
-LATEX = pdflatex
-
 MAIN = main.tex
 FILES = $(wildcard *.tex)
 
-OUT = notes
+OUT = agt
 
 $(OUT).pdf: $(FILES)
-	$(LATEX) $(MAIN)
-	$(LATEX) $(MAIN)
+	pdflatex --jobname=$(OUT) $(MAIN)
+	pdflatex --jobname=$(OUT) $(MAIN)
 
 count:
 	detex $(MAIN) | wc -w

@@ -1,13 +1,15 @@
 \section{Two-player zero-sum games}
+
 \label{sec:TPZSgames}
-Consider a zero-sum game determined by the matrix $\vect{A} \in
-\mathbb{R}^{m_1 \times m_2}_{\ge 0}$ which gives the payoffs to player I.
-The fact that the game is zero-sum $\Rightarrow$ payoffs for player II
-$=\vect{A}$.
+
+Consider a zero-sum game determined by the matrix $\vect{A} \in \mathbb{R}^{m_1
+\times m_2}_{\ge 0}$ which gives the payoffs to player I.  The fact that the
+game is zero-sum $\Rightarrow$ payoffs for player II $=\vect{A}$.
 
 \begin{definition}[Maximin]
 	A strategy $\vect{x}^* \in \Delta^{m_1}$ for player I is a \textit{maximin}
 	strategy if
+
 	\begin{equation}
 		\vect{x}^* \in \argmax_{\vect{x} \in \Delta^{m_1}} \left[
 			\min_{j \in [m_2]} (\vect{x}^\top \vect{A})_j \right]
@@ -17,6 +19,7 @@ $=\vect{A}$.
 \begin{definition}[Minimax]
 	A strategy $\vect{y}^* \in \Delta^{m_2}$ for player II is a
 	\textit{minimax} strategy if
+
 	\begin{equation}
 		\vect{y}^* \in \argmin_{\vect{y} \in \Delta^{m_2}} \left[
 			\max_{i \in [m_1]} (\vect{A} \vect{y})_i \right]
@@ -25,13 +28,12 @@ $=\vect{A}$.
 
 A maximin strategy ``maximizes the minimum expected payoff to player I''. A
 minimax strategy ``minimises the maximum expected payoff to player II''.
-Maximin and minimax values can be thought of as \textit{safety utilities}
--- no matter what the other plays, they can set a minimum payoff they will
-receive.
+Maximin and minimax values can be thought of as \textit{safety utilities} -- no
+matter what the other plays, they can set a minimum payoff they will receive.
 
 \begin{itemize}
-	\item \textsc{maximin} -- utility that player I can get if he commits
-		to move first
+	\item \textsc{maximin} -- utility that player I can get if he commits to
+		move first
 	\item \textsc{minimax} -- utility that plauer II can limit player I's
 		utility to if player II commits to move first
 \end{itemize}
@@ -45,222 +47,226 @@ receive.
 \end{theorem}
 
 \subsection{Two-player games as linear programs}
-	The maximization problem is as follows:
-	\begin{equation}
-		\begin{split}
-			\text{maximise}_{\vect{x},v} v \text{ subject to } \vect{x} & \in \Delta^{m_1} \\
-			\vect{x}^\top \vect{A} & \ge \begin{pmatrix}
-				v \\
-				\vdots \\
-				v
-			\end{pmatrix}
-		\end{split}
-	\end{equation}
 
-	Note that this is not yet a Linear Program due to the first constraint. We
-	can therefore rewrite the optimisation problem as an LP in standard form
-	as:
-	\begin{equation}
-		\begin{split}
-			\text{maximise}_{\vect{x},v} v \text{ subject to }
-			-\vect{x}^\top \vect{A} + \begin{pmatrix}
-				v \\
-				\vdots \\
-				v
-			\end{pmatrix} & \le 0 \\
-			\mathds{1}^\top \vect{x} & \le 1 \\
-			\vect{x} & \ge 0
-		\end{split}
-	\end{equation}
+The maximization problem is as follows:
 
-	The primal LP formulation is the following:
-	\begin{equation}
-		\begin{split}
-			\text{maximise}_{\vect{x},v}
-			(0,\ldots,0,1) \begin{pmatrix}
-				x_1 \\
-				\vdots \\
-				x_{m_1} \\
-				v
-			\end{pmatrix}
-			\text{ subject to }
-			\begin{pmatrix}
-				& & & 1 \\
-				& & & \vdots  \\
-				\multicolumn{3}{c}
-				{\raisebox{\dimexpr\normalbaselineskip+.7\ht\strutbox-.5\height}[0pt][0pt]
-				{{$-\vect{A}^\top$}}} & 1 \\
-				1 & \cdots & 1 & 0
-			\end{pmatrix} \begin{pmatrix}
-				x_1 \\
-				\vdots \\
-				x_{m_1} \\
-				v
-			\end{pmatrix} & \le \begin{pmatrix}
-				0 \\
-				\vdots \\
-				0 \\
-				1
-			\end{pmatrix} \\
-			\begin{pmatrix}
-				x_1 \\
-				\vdots \\
-				x_{m_1} \\
-				v
-			\end{pmatrix} & \ge 0
-		\end{split} 
-	\end{equation}
+\begin{equation}
+	\begin{split}
+		\text{maximise}_{\vect{x},v} v \text{ subject to } \vect{x} & \in \Delta^{m_1} \\
+		\vect{x}^\top \vect{A} & \ge \begin{pmatrix}
+			v \\
+			\vdots \\
+			v
+		\end{pmatrix}
+	\end{split}
+\end{equation}
 
-	The dual LP is:
-	\begin{equation}
-		\begin{split}
-			\text{minimise}_{\vect{y},w}
-			(0,\ldots,0,1) \begin{pmatrix}
-				y_1 \\
-				\vdots \\
-				y_{m_2} \\
-				w
-			\end{pmatrix}
-			\text{ subject to }
-			\begin{pmatrix}
-				& & & 1 \\
-				& & & \vdots  \\
-				\multicolumn{3}{c}
-				{\raisebox{\dimexpr\normalbaselineskip+.7\ht\strutbox-.5\height}[0pt][0pt]
-				{{$-\vect{A}$}}} & 1 \\
-				1 & \cdots & 1 & 0
-			\end{pmatrix} \begin{pmatrix}
-				y_1 \\
-				\vdots \\
-				y_{m_2} \\
-				w
-			\end{pmatrix} & \ge \begin{pmatrix}
-				0 \\
-				\vdots \\
-				0 \\
-				1
-			\end{pmatrix} \\
-			\begin{pmatrix}
-				y_1 \\
-				\vdots \\
-				y_{m_2} \\
-				w
-			\end{pmatrix} & \ge 0
-		\end{split} 
-	\end{equation}
+Note that this is not yet a Linear Program due to the first constraint. We can
+therefore rewrite the optimisation problem as an LP in standard form as:
+
+\begin{equation}
+	\begin{split}
+		\text{maximise}_{\vect{x},v} v \text{ subject to }
+		-\vect{x}^\top \vect{A} + \begin{pmatrix}
+			v \\
+			\vdots \\
+			v
+		\end{pmatrix} & \le 0 \\
+		\mathds{1}^\top \vect{x} & \le 1 \\
+		\vect{x} & \ge 0
+	\end{split}
+\end{equation}
+
+The primal LP formulation is the following:
+
+\begin{equation}
+	\begin{split}
+		\text{maximise}_{\vect{x},v}
+		(0,\ldots,0,1) \begin{pmatrix}
+			x_1 \\
+			\vdots \\
+			x_{m_1} \\
+			v
+		\end{pmatrix}
+		\text{ subject to }
+		\begin{pmatrix}
+			& & & 1 \\
+			& & & \vdots  \\
+			\multicolumn{3}{c}
+			{\raisebox{\dimexpr\normalbaselineskip+.7\ht\strutbox-.5\height}[0pt][0pt]
+			{{$-\vect{A}^\top$}}} & 1 \\
+			1 & \cdots & 1 & 0
+		\end{pmatrix} \begin{pmatrix}
+			x_1 \\
+			\vdots \\
+			x_{m_1} \\
+			v
+		\end{pmatrix} & \le \begin{pmatrix}
+			0 \\
+			\vdots \\
+			0 \\
+			1
+		\end{pmatrix} \\
+		\begin{pmatrix}
+			x_1 \\
+			\vdots \\
+			x_{m_1} \\
+			v
+		\end{pmatrix} & \ge 0
+	\end{split} 
+\end{equation}
+
+The dual LP is:
+
+\begin{equation}
+	\begin{split}
+		\text{minimise}_{\vect{y},w}
+		(0,\ldots,0,1) \begin{pmatrix}
+			y_1 \\
+			\vdots \\
+			y_{m_2} \\
+			w
+		\end{pmatrix}
+		\text{ subject to }
+		\begin{pmatrix}
+			& & & 1 \\
+			& & & \vdots  \\
+			\multicolumn{3}{c}
+			{\raisebox{\dimexpr\normalbaselineskip+.7\ht\strutbox-.5\height}[0pt][0pt]
+			{{$-\vect{A}$}}} & 1 \\
+			1 & \cdots & 1 & 0
+		\end{pmatrix} \begin{pmatrix}
+			y_1 \\
+			\vdots \\
+			y_{m_2} \\
+			w
+		\end{pmatrix} & \ge \begin{pmatrix}
+			0 \\
+			\vdots \\
+			0 \\
+			1
+		\end{pmatrix} \\
+		\begin{pmatrix}
+			y_1 \\
+			\vdots \\
+			y_{m_2} \\
+			w
+		\end{pmatrix} & \ge 0
+	\end{split} 
+\end{equation}
 
 \subsection{LP duality and zero-sum games}
-	We have the primal (P):
-	\begin{equation}
-		\begin{split}
-			\text{max}_{\vect{x}, v} v \text{ subject to }
-			\vect{A}^\top \vect{x} & \ge \vect{v} \\
-			\mathds{1}^\top \vect{x} & \le 1 \\
-			\vect{x} & \ge 0 \\
-			\vect{v} & \ge 0
-		\end{split}
-	\end{equation}
 
-	We denote by $\vect{v}$ (and analogously for $\vect{w}$) the column
-	vector $\begin{pmatrix} v \\ \vdots \\ v \end{pmatrix}$. The dual (D) is:
-	\begin{equation}
-		\begin{split}
-			\text{min}_{\vect{y}, w} v \text{ subject to }
-			\vect{A} \vect{y} & \le \vect{w} \\
-			\mathds{1}^\top \vect{y} & \le 1 \\
-			\vect{y} & \ge 0 \\
-			\vect{w} & \ge 0
-		\end{split}
-	\end{equation}
+We have the primal (P):
 
-	\begin{fact}
-		\label{fact:A}
-		For every (P) feasible solution $(\vect{x}, v)$ and for every
-		mixed strategy $\vect{y} \in \Delta^{m_2}$, $(\vect{x}^\top
-		\vect{A})\vect{y} \ge \vect{v}$.
-	\end{fact}
-	
-	This says that the expected utility for player I by playing
-	$\vect{x}$, if player II chooses any $\vect{y}$, is at least
-	$\vect{v}$.
+\begin{equation}
+	\begin{split}
+		\text{max}_{\vect{x}, v} v \text{ subject to }
+		\vect{A}^\top \vect{x} & \ge \vect{v} \\
+		\mathds{1}^\top \vect{x} & \le 1 \\
+		\vect{x} & \ge 0 \\
+		\vect{v} & \ge 0
+	\end{split}
+\end{equation}
 
-	\begin{proof}
-		By the definition of the dot product:
-		\begin{equation*}
-			\vect{x}^\top \vect{A} \vect{y} = \sum_{j \in [m_2]}
-			(\vect{x}^\top \vect{A})_j \cdot \vect{y}_j
-		\end{equation*}
+We denote by $\vect{v}$ (and analogously for $\vect{w}$) the column vector
+$\begin{pmatrix} v \\ \vdots \\ v \end{pmatrix}$. The dual (D) is:
 
-		By (P)-feasibility, $\vect{A}^\top \vect{x} \ge 0$ and
-		$\vect{y}_j \ge 0$, so:
-		\begin{equation*}
-			\sum_{j \in [m_2]} (\vect{x}^\top \vect{A})_j \cdot
-			\vect{y}_j \ge \sum_{j \in [m_2]} v \cdot \vect{y}_j = v
-			\sum_{j \in [m_2]} \vect{y}_j = v
-		\end{equation*}
-	\end{proof}
+\begin{equation}
+	\begin{split}
+		\text{min}_{\vect{y}, w} v \text{ subject to }
+		\vect{A} \vect{y} & \le \vect{w} \\
+		\mathds{1}^\top \vect{y} & \le 1 \\
+		\vect{y} & \ge 0 \\
+		\vect{w} & \ge 0
+	\end{split}
+\end{equation}
 
-	\begin{fact}
-		\label{fact:B}
-		If $\vect{A} \ge 0$, then for every (P)-optimal solution
-		$(\vect{x}, v)$ we have that $\vect{x} \in \Delta^{m_1}$ is a
-		mixed strategy for player I.
-	\end{fact}
+\begin{fact}
+	\label{fact:A}
+	For every (P) feasible solution $(\vect{x}, v)$ and for every
+	mixed strategy $\vect{y} \in \Delta^{m_2}$, $(\vect{x}^\top
+	\vect{A})\vect{y} \ge \vect{v}$.
+\end{fact}
 
-	\begin{proof}
-		If $\mathds{1} \vect{x} > 1 - \varepsilon$ for some $\varepsilon
-		> 0$, then $(\frac{\vect{x}}{1-\varepsilon},
-		\frac{v}{1-\varepsilon})$ is also (P)-feasible. TODO
-	\end{proof}
+This says that the expected utility for player I by playing $\vect{x}$, if
+player II chooses any $\vect{y}$, is at least $\vect{v}$.
 
-	\begin{fact}
-		\label{fact:C}
-		For every (D)-feasible solution $(\vect{y}, w)$ and for every
-		mixed strategy $\vect{x} \in \Delta^{m_1}$,
-		$\vect{x}^\top(\vect{A} \vect{y}) \le w$.
-	\end{fact}
+\begin{proof}
+	By the definition of the dot product:
+	\begin{equation*}
+		\vect{x}^\top \vect{A} \vect{y} = \sum_{j \in [m_2]}
+		(\vect{x}^\top \vect{A})_j \cdot \vect{y}_j
+	\end{equation*}
 
-	\begin{fact}
-		\label{fact:D}
-		If $\vect{A} \ge 0$, then for every (D)-optimal solution
-		$(\vect{y}, w)$ we have that $\vect{y} \in \Delta^{m_2}$ is a
-		mixed strategy for player II.
-	\end{fact}
+	By (P)-feasibility, $\vect{A}^\top \vect{x} \ge 0$ and
+	$\vect{y}_j \ge 0$, so:
+	\begin{equation*}
+		\sum_{j \in [m_2]} (\vect{x}^\top \vect{A})_j \cdot
+		\vect{y}_j \ge \sum_{j \in [m_2]} v \cdot \vect{y}_j = v
+		\sum_{j \in [m_2]} \vect{y}_j = v
+	\end{equation*}
+\end{proof}
 
-	\begin{fact}
-		(P) has an optimal solution of finite value.
-	\end{fact}
+\begin{fact}
+	\label{fact:B}
+	If $\vect{A} \ge 0$, then for every (P)-optimal solution $(\vect{x}, v)$ we
+	have that $\vect{x} \in \Delta^{m_1}$ is a mixed strategy for player I.
+\end{fact}
 
-	\begin{proof}
-		The feasible set is non-empty: TODO
-	\end{proof}
+\begin{proof}
+	If $\mathds{1} \vect{x} > 1 - \varepsilon$ for some $\varepsilon > 0$, then
+	$(\frac{\vect{x}}{1-\varepsilon}, \frac{v}{1-\varepsilon})$ is also
+	(P)-feasible. TODO
+\end{proof}
 
-	\begin{theorem}[Existence and structure of MNE in zero-sum games]
-		For every two-player zero-sum game $\vect{A} \in \mathbb{R}^{m_1
-		\times m_2}_{\ge 0}$, there are mixed strategies $\vect{x} \in
-		\Delta^{m_1}, \vect{y} \in \Delta^{m_2}$ such that:
-		\begin{itemize}
-			\item $\vect{x}$ and $\vect{y}$ are maximin and minimax
-				strategies, respectively
-			\item $(\vect{x}, \vect{y})$ is a Nash Equilibrium
-			\item all Nash Equilibria have the same expected payoffs (the
-				\textnormal{value} of the game)
-		\end{itemize}
-	\end{theorem}
+\begin{fact}
+	\label{fact:C}
+	For every (D)-feasible solution $(\vect{y}, w)$ and for every mixed
+	strategy $\vect{x} \in \Delta^{m_1}$, $\vect{x}^\top(\vect{A} \vect{y}) \le
+	w$.
+\end{fact}
 
-	\begin{proof}
-		Let $(x, v)$ and $(y, w)$ be optimal solutions of (P) and (D),
-		respectively.
+\begin{fact}
+	\label{fact:D}
+	If $\vect{A} \ge 0$, then for every (D)-optimal solution $(\vect{y}, w)$ we
+	have that $\vect{y} \in \Delta^{m_2}$ is a mixed strategy for player II.
+\end{fact}
 
-		By the Strong Duality Theorem, we have that $v = w$. Using
-		Facts~\ref{fact:A} to \ref{fact:D}, we know that $x$ is a maximin
-		strategy for player I, and $y$ is a minimax strategy for player II.
+\begin{fact}
+	(P) has an optimal solution of finite value.
+\end{fact}
 
-		$x$ and $y$ are mutual best responses, so $(x,y)$ is a Nash
-		Equilibrium.
-	\end{proof}
+\begin{proof}
+	The feasible set is non-empty: TODO
+\end{proof}
 
-	\begin{corollary}
-		Equilibrium computation in two-player zero-sum games is computable
-		in polynomial time.
-	\end{corollary}
+\begin{theorem}[Existence and structure of MNE in zero-sum games]
+	For every two-player zero-sum game $\vect{A} \in \mathbb{R}^{m_1 \times
+	m_2}_{\ge 0}$, there are mixed strategies $\vect{x} \in \Delta^{m_1},
+	\vect{y} \in \Delta^{m_2}$ such that:
+
+	\begin{itemize}
+		\item $\vect{x}$ and $\vect{y}$ are maximin and minimax strategies,
+			respectively
+		\item $(\vect{x}, \vect{y})$ is a Nash Equilibrium
+		\item all Nash Equilibria have the same expected payoffs (the
+			\textnormal{value} of the game)
+	\end{itemize}
+\end{theorem}
+
+\begin{proof}
+	Let $(x, v)$ and $(y, w)$ be optimal solutions of (P) and (D),
+	respectively.
+
+	By the Strong Duality Theorem, we have that $v = w$. Using
+	Facts~\ref{fact:A} to \ref{fact:D}, we know that $x$ is a maximin strategy
+	for player I, and $y$ is a minimax strategy for player II.
+
+	$x$ and $y$ are mutual best responses, so $(x,y)$ is a Nash Equilibrium.
+\end{proof}
+
+\begin{corollary}
+	Equilibrium computation in two-player zero-sum games is computable in
+	polynomial time.
+\end{corollary}

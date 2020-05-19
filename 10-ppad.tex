@@ -1,4 +1,5 @@
 \section{PPAD}
+
 \begin{definition}[Search problem]
 	An algorithmic problem is a total search problem if each instance $x$ has a
 	search space $S_x \subseteq \{0,1\}*$ of bitstrings of length polynomial in
@@ -7,20 +8,19 @@
 
 Given the input $x$ to some search problem, we wish to find a $y \in Q_x$. For
 example, the computational problem \textsc{Nash} is, given a finite game in
-strategic form and parameter $\varepsilon > 0$, find an
-$\varepsilon$-Nash Equilibrium. By Nash's Theorem, every finite game has a Nash
-Equilibrium, hence every finite game also has an $\varepsilon$-Nash
-Equilibrium.
+strategic form and parameter $\varepsilon > 0$, find an $\varepsilon$-Nash
+Equilibrium. By Nash's Theorem, every finite game has a Nash Equilibrium, hence
+every finite game also has an $\varepsilon$-Nash Equilibrium.
 
-The problem \textsc{Sperner} is, given a valid colouring of a
-subdivision of a simplex, compute a fully-coloured vertex in such a
-colouring.
+The problem \textsc{Sperner} is, given a valid colouring of a subdivision of a
+simplex, compute a fully-coloured vertex in such a colouring.
 
 The problem \textsc{$\alpha$-Brouwer} is, given a continuous function $f:S
 \rightarrow S$ from a compact convex set to itself and parameter $\alpha > 0$,
 find an $\alpha$-approximate fixed point of $f$.
 
 \subsection{\textsc{End-of-a-Line}}
+
 The problem \textsc{(Explicit) End-of-a-Line} is, given a directed graph
 $G=(V,\vec{E})$ such that every vertex has at most one predecessor and at most
 one successor, and an initial vertex $v_0$ (the \emph{standard source}) with
@@ -70,4 +70,3 @@ intractability, it is a subset of NP and hence ``not as hard''.
 \begin{theorem}[Goldberg, 2006]
 	\textsc{Nash} is PPAD-complete.
 \end{theorem}
-

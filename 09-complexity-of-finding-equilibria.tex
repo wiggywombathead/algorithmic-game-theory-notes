@@ -1,4 +1,5 @@
 \section{Complexity of computing equilibria}
+
 We can compute Nash Equilibria in two-player zero-sum games in polynomial time
 using linear programming as in Section~\ref{sec:TPZSgames}. However, in general
 it is not possible to compute exact Nash Equilibria unless some artificial
@@ -6,9 +7,8 @@ encoding of the output is used, as Nash Equilibria may contain irrational
 numbers.
 
 \begin{definition}[$\varepsilon$-Nash Equilibrium]
-	A strategy profile $
-	sigma^*$ is an $\varepsilon$-Nash Equilibrium if for all players $i$ and
-	for all pure strategies $\sigma_i \in \Delta^{|S_i|}$:
+	A strategy profile $\sigma^*$ is an $\varepsilon$-Nash Equilibrium if for
+	all players $i$ and for all $\sigma_i \in \Delta^{|S_i|}$:
 	\begin{equation}
 		u_i(\sigma^*_{-i}, \sigma^*_i) \ge u_i(\sigma^*_{-i}, \sigma_i) - \varepsilon
 	\end{equation}
@@ -141,6 +141,7 @@ $\alpha$-approximate fixed points.
 \end{proof}
 
 \subsection{The number of subsimplices}
+
 Notice that the function from the proof of Nash's Theorem has dimension $d =
 \sum_{i \in [n]} |S_i| = \sum_{i \in [n]} m_i$ (the sum of the number of pure
 strategies for all players). Using Fact~\ref{fact:Lipschitz} and Scarf's

@@ -1,128 +1,130 @@
 \section{Tragedy of the Commons}
-	\begin{itemize}
-		\itemsep0em
-		\item $n$ players sharing a common resource of limited capacity, normalized e.g. to 1
-		\item each player $i$ picks their own level of usage $x_i \in [0,1]$
-		\item the quality of the resource deteriorates with increasing usage
-	\end{itemize}
 
-	Together the players will pick a vector $\vect{x} = (x_1, \ldots, x_n)
-	\in \mathbb{R}^n$, indicating each player's usage.
-	Denote total load $\mathcal{L} = \sum_j x_j$, and hence spare capacity = $1
-	- \mathcal{L}$. \\
+\begin{itemize}
+	\itemsep0em
+	\item $n$ players sharing a common resource of limited capacity, normalized e.g. to 1
+	\item each player $i$ picks their own level of usage $x_i \in [0,1]$
+	\item the quality of the resource deteriorates with increasing usage
+\end{itemize}
 
-	Denote by $u_i(\vect{x})$ each player's satisfaction/utility of
-	their allocation with respect to each other player's use of the resource.
-	If the total load is greater than 1, no player gets any satisfaction. Else,
-	the satisfaction for player $i$ decreases with increasing total usage, but
-	increases with his own usage (up to a point).
+Together the players will pick a vector $\vect{x} = (x_1, \ldots, x_n) \in
+\mathbb{R}^n$, indicating each player's usage.  Denote total load $\mathcal{L}
+= \sum_j x_j$, and hence spare capacity = $1 - \mathcal{L}$. \\
 
-	\begin{equation}
-		u_i(\vect{x}) = 
-		\begin{cases}
-			x_i (1 - \mathcal{L}) & \mathcal{L} < 1 \\
-			0 & \text{otherwise}
-		\end{cases}
-	\end{equation}
+Denote by $u_i(\vect{x})$ each player's satisfaction/utility of their
+allocation with respect to each other player's use of the resource.  If the
+total load is greater than 1, no player gets any satisfaction. Else, the
+satisfaction for player $i$ decreases with increasing total usage, but
+increases with his own usage (up to a point).
+
+\begin{equation}
+	u_i(\vect{x}) = 
+	\begin{cases}
+		x_i (1 - \mathcal{L}) & \mathcal{L} < 1 \\
+		0 & \text{otherwise}
+	\end{cases}
+\end{equation}
 
 \subsection{Socially optimal solutions}
-	Denote by $u(\vect{x})$ the total satisfaction, i.e. the sum of
-	each player's satisfaction according to the allocation vector $\vect{x}$:
-	\begin{equation}
-		\begin{split}
-			u(\vect{x}) & := \sum_j u_j(\vect{x}) \\
-				& = \sum_j x_j (1 - \mathcal{L}) \\
-				& = (1 - \mathcal{L}) \sum_j x_j \\
-				& = (1 - \mathcal{L}) \mathcal{L} \\
-				& = \mathcal{L} - \mathcal{L}^2
-			\end{split}
-			\end{equation}
 
-	Define $u(\mathcal{L}) := \mathcal{L} - \mathcal{L}^2$, i.e. the
-	total satisfaction as a function of the total load. \\
+Denote by $u(\vect{x})$ the total satisfaction, i.e. the sum of each player's
+satisfaction according to the allocation vector $\vect{x}$:
 
-	A socially optimal outcome is achieved by maximising this function, so
-	$\frac{d}{d\mathcal{L}} u(\mathcal{L}) = -2\mathcal{L} + 1$,
-	which is maximised by $\mathcal{L}^* = \frac{1}{2}$. Therefore, a
-	benevolent dictator would assign each player an allocation of the shared
-	resource such the sum of all the players' allocations is $\frac{1}{2}$.
-	Note that the specific allocation to each player doesn't matter, only that
-	the total load is $\frac{1}{2}$. \\
+\begin{equation}
+	\begin{split}
+		u(\vect{x}) & := \sum_j u_j(\vect{x}) \\
+		& = \sum_j x_j (1 - \mathcal{L}) \\
+		& = (1 - \mathcal{L}) \sum_j x_j \\
+		& = (1 - \mathcal{L}) \mathcal{L} \\
+		& = \mathcal{L} - \mathcal{L}^2
+	\end{split}
+\end{equation}
 
-	The total satisfaction of this socially optimal solution is
-	$u(\mathcal{L}^*) = u(\frac{1}{2}) = \frac{1}{2} -
-	(\frac{1}{2})^2 = \frac{1}{4}$. But is this solution stable?
+Define $u(\mathcal{L}) := \mathcal{L} - \mathcal{L}^2$, i.e. the total
+satisfaction as a function of the total load. \\
+
+A socially optimal outcome is achieved by maximising this function, so
+$\frac{d}{d\mathcal{L}} u(\mathcal{L}) = -2\mathcal{L} + 1$, which is maximised
+by $\mathcal{L}^* = \frac{1}{2}$. Therefore, a benevolent dictator would assign
+each player an allocation of the shared resource such the sum of all the
+players' allocations is $\frac{1}{2}$.  Note that the specific allocation to
+each player doesn't matter, only that the total load is $\frac{1}{2}$. \\
+
+The total satisfaction of this socially optimal solution is $u(\mathcal{L}^*) =
+u(\frac{1}{2}) = \frac{1}{2} - (\frac{1}{2})^2 = \frac{1}{4}$. But is this
+solution stable?
 
 \subsection{The stable solution}
-	Self-interest assumption: each player strives to maximise $x_i (1 -
-	\mathcal{L})$. With this in mind, define $\mathcal{L}_{-i} := \sum_{j \neq
-	i} x_j = (\sum_j x_j) - x_i$. Assuming $\mathcal{L} < 1$, then:
-	\begin{equation}
-		\begin{split}
-			u_i(\vect{x}) & = x_i (1 - \mathcal{L}) \\
-			& = x_i (1 - (\mathcal{L}_{-i} + x_i)) \\
-			& = x_i (1 - \mathcal{L}_{-i} - x_i)
-		\end{split}
-	\end{equation}
 
-	Now define $u_i(x_i) := x_i (1 - \mathcal{L}_{-i} - x_i)$.
+Self-interest assumption: each player strives to maximise $x_i (1 -
+\mathcal{L})$. With this in mind, define $\mathcal{L}_{-i} := \sum_{j \neq i}
+x_j = (\sum_j x_j) - x_i$. Assuming $\mathcal{L} < 1$, then:
+\begin{equation}
+	\begin{split}
+		u_i(\vect{x}) & = x_i (1 - \mathcal{L}) \\
+		& = x_i (1 - (\mathcal{L}_{-i} + x_i)) \\
+		& = x_i (1 - \mathcal{L}_{-i} - x_i)
+	\end{split}
+\end{equation}
 
-	\begin{claim}
-		$u_i(x_i)$ is maximised by $x_i^* = \frac{1 -
-		\mathcal{L}_{-i}}{2}$
-	\end{claim}
+Now define $u_i(x_i) := x_i (1 - \mathcal{L}_{-i} - x_i)$.
 
-	\begin{proof}
-		$\frac{d}{dx_i} u_i(x_i) = 1 - \mathcal{L}_{-i} - 2x_i$,
-		which is maximised at $x_i^* = \frac{1 - \mathcal{L}_{-i}}{2}$
-	\end{proof}
+\begin{claim}
+	$u_i(x_i)$ is maximised by $x_i^* = \frac{1 -
+	\mathcal{L}_{-i}}{2}$
+\end{claim}
 
-	\begin{definition}[Stable solution]
-		A solution $\vect{x} = (x_1, \ldots, x_n)$ of the Tragedy of the
-		Commons game is stable if no player wants to deviate from it. That is,
-		for all $i$, $x_i$ is the best response to $\vect{x}_{-i}$, where
-		$\vect{x}_{-i} = (x_1, \ldots, x_{i-1}, x_{i+1}, \ldots, x_n)$.
-	\end{definition}
+\begin{proof}
+	$\frac{d}{dx_i} u_i(x_i) = 1 - \mathcal{L}_{-i} - 2x_i$,
+	which is maximised at $x_i^* = \frac{1 - \mathcal{L}_{-i}}{2}$
+\end{proof}
 
-	\begin{claim}
-		The \textit{only} stable solution in the Tragedy of the Commons game is
-		$\vect{x} = (\frac{1}{n+1}, \ldots, \frac{1}{n+1})$
-	\end{claim}
+\begin{definition}[Stable solution]
+	A solution $\vect{x} = (x_1, \ldots, x_n)$ of the Tragedy of the Commons
+	game is stable if no player wants to deviate from it. That is, for all $i$,
+	$x_i$ is the best response to $\vect{x}_{-i}$, where $\vect{x}_{-i} = (x_1,
+	\ldots, x_{i-1}, x_{i+1}, \ldots, x_n)$.
+\end{definition}
 
-	\begin{proof}
-		The solution is stable when no player wishes to deviate. As $u_i(x_i)$
-		has one maximum, each player chooses their allocation as $x_i = \frac{1
-		- \mathcal{L}_{-i}}{2}$. The total load $\mathcal{L}$ under this
-		allocation is:
-		\begin{equation*}
-			\sum_i x_i = \sum_i \frac{1}{2}(1 - \mathcal{L}_{-i}) = \sum_i
-			\frac{1}{2}(1 - (\mathcal{L} - x_i))
-		\end{equation*}
+\begin{claim}
+	The \textit{only} stable solution in the Tragedy of the Commons game is
+	$\vect{x} = (\frac{1}{n+1}, \ldots, \frac{1}{n+1})$
+\end{claim}
 
-		Hence:
-		\begin{equation*}
-			2 \mathcal{L} = \sum_i 1 - \sum_i \mathcal{L} + \sum_i x_i = n -
-			n\mathcal{L} + \mathcal{L}
-		\end{equation*}
+\begin{proof}
+	The solution is stable when no player wishes to deviate. As $u_i(x_i)$ has
+	one maximum, each player chooses their allocation as $x_i = \frac{1 -
+	\mathcal{L}_{-i}}{2}$. The total load $\mathcal{L}$ under this allocation
+	is:
+	\begin{equation*}
+		\sum_i x_i = \sum_i \frac{1}{2}(1 - \mathcal{L}_{-i}) = \sum_i
+		\frac{1}{2}(1 - (\mathcal{L} - x_i))
+	\end{equation*}
 
-		So $\mathcal{L} = \frac{n}{n+1} \Rightarrow x_i = \frac{1}{n+1} \text{
-			for all } i$.
-	\end{proof}
+	Hence:
+	\begin{equation*}
+		2 \mathcal{L} = \sum_i 1 - \sum_i \mathcal{L} + \sum_i x_i = n -
+		n\mathcal{L} + \mathcal{L}
+	\end{equation*}
+
+	So $\mathcal{L} = \frac{n}{n+1} \Rightarrow x_i = \frac{1}{n+1} \text{ for
+	all } i$.
+\end{proof}
 
 \subsection{The tragedy}
-	The total satisfaction of a socially optimal solution $u(\vect{x}^*) =
-	\sum_i u_i(\vect{x}^*) = \sum_i x_i (1 - \frac{1}{2}) = \frac{1}{2}
-	\sum_i x_i = \frac{1}{4}$.  The spare capacity of the shared resource in
-	the stable (self-interested) solution is $1 - \mathcal{L} = 1 -
-	\frac{n}{n+1} = \frac{1}{n+1}$, so the total satisfaction in the stable
-	solution is:
-	\begin{equation}
-		\begin{split}
-			\sum_i x_i \bigg(\frac{1}{n+1} \bigg) & = \sum_i \frac{1}{n+1} \frac{1}{n+1} \\
-			& = \frac{n}{(n+1)^2} < \frac{1}{n}
-		\end{split}
-	\end{equation}
-	
-	The tragedy is that not only is the total utility strictly smaller than for
-	a socially optimal solution, but it is also bounded by $\frac{1}{n}$,
-	meaning the more players there are, the less benefit they get.
+
+The total satisfaction of a socially optimal solution $u(\vect{x}^*) = \sum_i
+u_i(\vect{x}^*) = \sum_i x_i (1 - \frac{1}{2}) = \frac{1}{2} \sum_i x_i =
+\frac{1}{4}$.  The spare capacity of the shared resource in the stable
+(self-interested) solution is $1 - \mathcal{L} = 1 - \frac{n}{n+1} =
+\frac{1}{n+1}$, so the total satisfaction in the stable solution is:
+\begin{equation}
+	\begin{split}
+		\sum_i x_i \bigg(\frac{1}{n+1} \bigg) & = \sum_i \frac{1}{n+1} \frac{1}{n+1} \\
+		& = \frac{n}{(n+1)^2} < \frac{1}{n}
+	\end{split}
+\end{equation}
+
+The tragedy is that not only is the total utility strictly smaller than for a
+socially optimal solution, but it is also bounded by $\frac{1}{n}$, meaning the
+more players there are, the less benefit they get.

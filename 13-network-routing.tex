@@ -1,6 +1,8 @@
 \section{Network Routing games}
+
 We turn our attention now to network flows, and begin by defining the following
 model. Let $G=(V,E)$ be a directed graph with:
+
 \begin{itemize}
 	\item $k$ source-destination pairs $(s_i, t_i)$, each with demand $r_i \in \mathbb{R}_{\ge 0}$.
 	\item latency functions $\ell_e : \mathbb{R}_{\ge 0} \rightarrow
@@ -13,12 +15,27 @@ model. Let $G=(V,E)$ be a directed graph with:
 	\item Flow on edge $e$, $f_e := \sum_{p \in P_i : e \in p} f(p)$
 	\item Latency of path $p$ $L_p (f) := \sum_{e \in p} \ell_e (f_e)$
 	\item Social cost of flow $C(f) = \sum_{p \in P} f(p) \cdot L_p(f) =
-		\sum_{e \in E} f(e) \cdot \ell_e (f_e)$
+		\sum_{e \in E} f_e \cdot \ell_e (f_e)$
 \end{itemize}
 
 Consider the following example:
 
-TODO: diagram
+\begin{center}
+	\begin{tikzpicture}[>=stealth',auto,node distance=2.8cm,semithick]
+		\tikzstyle{every state}=[draw]
+
+		\node[state] (1) {$s_1$};
+		\node[state] (2) [above right of=1] {};
+		\node[state] (3) [below right of=1] {};
+		\node[state] (4) [below right of=2] {$t_1$};
+
+		\path[->]
+		(1) edge [bend left] node {$\ell_A(x)=x$} (2)
+			edge [bend right] node [below left] {$\ell_C(x)=1$} (3)
+		(2)	edge [bend left] node {$\ell_B(x)=1$} (4)
+		(3) edge [bend right] node [below right] {$\ell_D(x)=x$} (4);
+	\end{tikzpicture}
+\end{center}
 
 We have:
 \begin{itemize}
@@ -63,6 +80,7 @@ So far there has been no game to play -- we could simply compute the
 cost-minimising flow and route the traffic as such. However, in selfish routing
 we assume that the agents are responsible for routing the traffic, each trying
 to minimise his own latency. In this model, there are:
+
 \begin{itemize}
 	\item infinitely many player $i \in [0, r]$, each controlling an
 		infinitesimal amount of traffic
@@ -111,7 +129,23 @@ route).
 
 \subsubsection{Braess' Paradox}
 
-TODO: diagram
+\begin{center}
+	\begin{tikzpicture}[>=stealth',auto,node distance=3cm,semithick]
+		\tikzstyle{every state}=[draw]
+
+		\node[state] (1) {$s_1$};
+		\node[state] (2) [above right of=1] {};
+		\node[state] (3) [below right of=1] {};
+		\node[state] (4) [below right of=2] {$t_1$};
+
+		\path[->]
+		(1) edge [bend left] node {$\ell_A(x)=x$} (2)
+			edge [bend right] node [below left] {$\ell_C(x)=1$} (3)
+		(2)	edge [bend left] node {$\ell_B(x)=1$} (4)
+		(2)	edge node {$\ell_E(x)=0$} (3)
+		(3) edge [bend right] node [below right] {$\ell_D(x)=x$} (4);
+	\end{tikzpicture}
+\end{center}
 
 We have installed a bridge $E$ that incurs no latency when travelling over it,
 that is, $\ell_E(x) = 0$.
@@ -208,7 +242,21 @@ Anarchy can be made arbitrarily bad.
 
 \subsubsection{Pigou's Network}
 
-The latency functions are $\ell_A(x)=x$, $\ell_B(x)=1$. Consider the flow
+\begin{center}
+	\begin{tikzpicture}[>=stealth',auto,node distance=3cm,semithick]
+		\tikzstyle{every state}=[draw]
+
+		\node[state] (1) {};
+		\node[state] (2) [right of=1] {};
+
+		\path[->]
+		(1) edge [bend left] node {$\ell_A(x)=x$} (2)
+			edge [bend right] node [below] {$\ell_B(x)=1$} (2);
+	\end{tikzpicture}
+\end{center}
+
+
+The latency functions are $\ell_A(x)=x$, $\ell_B(x)=1$. Consider the flow $f$:
 \begin{equation*}
 	\begin{split}
 		f^\varepsilon : & \, A \mapsto 1 - \varepsilon \\
@@ -222,6 +270,19 @@ of $1-\varepsilon$ along edge $A$. Hence the only Wardrop Equilibrium is $f^0$,
 whose social cost is 1. The minimum social cost is achieved by the flow
 $f^\frac{1}{2}$, which incurs a social cost of $3/4$. Hence the Price of
 Anarchy of the above network is $\frac{1}{3/4} = 4/3$.
+
+\begin{center}
+	\begin{tikzpicture}[>=stealth',auto,node distance=3cm,semithick]
+		\tikzstyle{every state}=[draw]
+
+		\node[state] (1) {};
+		\node[state] (2) [right of=1] {};
+
+		\path[->]
+		(1) edge [bend left] node {$\ell_A(x)=x^d$} (2)
+			edge [bend right] node [below] {$\ell_B(x)=1$} (2);
+	\end{tikzpicture}
+\end{center}
 
 Now consider the same network with latency functions $\ell_A(x)=x^d$ for $d \in
 [0,1]$, and $\ell_B(x)=1$. The flow $f^0$ is still the only Wardrop Equilibrium
@@ -275,7 +336,18 @@ possible latency function $\ell \in \mathcal{C}$ and the worst possible demand
 $r$. One of the two edges has constant latency equal to $\ell(r)$, and the
 other's latency is given by the latency function $\ell$.
 
-TODO: diagram
+\begin{center}
+	\begin{tikzpicture}[>=stealth',auto,node distance=3cm,semithick]
+		\tikzstyle{every state}=[draw]
+
+		\node[state] (1) {};
+		\node[state] (2) [right of=1] {};
+
+		\path[->]
+		(1) edge [bend left] node {$\ell_A(x)=\ell(x)$} (2)
+			edge [bend right] node [below] {$\ell_B(x)=\ell(r)$} (2);
+	\end{tikzpicture}
+\end{center}
 
 \begin{theorem}
 	If a class $\mathcal{C}$ of latency functions contains all constant
