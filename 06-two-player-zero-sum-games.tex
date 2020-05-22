@@ -1,10 +1,109 @@
 \section{Two-player zero-sum games}
 
+\subsection{Minimax and maximin}
+
 \label{sec:TPZSgames}
 
 Consider a zero-sum game determined by the matrix $\vect{A} \in \mathbb{R}^{m_1
-\times m_2}_{\ge 0}$ which gives the payoffs to player I.  The fact that the
-game is zero-sum $\Rightarrow$ payoffs for player II $=\vect{A}$.
+\times m_2}_{\ge 0}$ which gives the payoffs to player I. Since the game is
+zero-sum means that the payoff matrix for player II $\vect{B} = -\vect{A}$.
+
+\begin{definition}[Maximin value]
+	The maximin value is the highest payoff a player can be sure to receive
+	without knowing the actions of the other players. Equivalently, this is the
+	lowest value other players can force the player to receive when they know
+	the player's action:
+
+	\begin{equation}
+		\underline{v_i} = \max_{s_i} \min_{s_{-i}} u_i(s_i, s_{-i})
+	\end{equation}
+\end{definition}
+
+\begin{definition}[Minimax value]
+	The minimax value is the smallest value the other players can force the
+	player to receive, without knowing the player's actions. Equivalently, it
+	is the largest value the player can be sure to get when they know the
+	actions of the other players:
+
+	\begin{equation}
+		\overline{v_i} = \min_{s_{-i}} \max_{s_i} u_i(s_i, s_{-i})
+	\end{equation}
+\end{definition}
+
+Consider the maximin values of the players in a two-player zero-sum game. Since
+$u_\text{I}+u_\text{II}=0$, we can denote $u$ as the payoff to player I and
+$-u$ as the payoff to player II. Player I's maximin is:
+\begin{equation*}
+	\underline{v_\text{I}} = \max_{s_\text{I} \in S_\text{I}} \min_{s_\text{II}
+	\in S_\text{II}} u(s_\text{I}, s_\text{II})
+\end{equation*}
+
+Player II's maximin value is:
+\begin{equation*}
+		\underline{v_\text{II}} = \max_{s_\text{II} \in S_\text{II}}
+		\min_{s_\text{I} \in S_\text{I}} -u(s_\text{I}, s_\text{II}) = -
+		\min_{s_\text{II} \in S_\text{II}} \max_{s_\text{I} \in S_\text{I}}
+		u(s_\text{I}, s_\text{II})
+\end{equation*}
+
+\begin{definition}[Maximin and minimax value in two-player zero-sum games]
+	The \emph{maximin value} $\underline{v}$ is the minimum that player I can
+	guarantee themselves to get. The \emph{minimax value} $\overline{v}$ is the
+	maximum that player II can guarantee they will pay to player I:
+	\begin{equation}
+		\begin{split}
+			\underline{v} & = \max_{s_\text{I} \in S_\text{I}} \min_{s_\text{II}
+			\in S_\text{II}} u(s_\text{I}, s_\text{II}) \\
+			\overline{v} & = \min_{s_\text{II} \in S_\text{II}} \max_{s_\text{I}
+			\in S_\text{I}} u(s_\text{I}, s_\text{II}) \\
+		\end{split}
+	\end{equation}
+\end{definition}
+
+In other words:
+\begin{itemize}
+	\item maximin value: ``maximum of row minima''
+	\item minimax value: ``minimum of column maxima''
+\end{itemize}
+
+\textbf{Example}: Consider the following zero-sum game:
+\begin{center}
+	\begin{tabular}{c|cc}
+		& L & R \\ \hline
+		T & -2 & 5 \\
+		B & 3 & 0 \\
+	\end{tabular}
+\end{center}
+
+We have:
+\begin{equation*}
+	\begin{split}
+		\underline{v} & = \max \{-2,0\} = 0 \\
+		\overline{v} & = \min \{3,5\} = 3
+	\end{split}
+\end{equation*}
+
+The maximin strategy for player I is the strategy guaranteeing the maximin
+value for player I, while the minimax strategy for player II is the strategy
+guaranteeing the minimax value for player II. In the above example, player I's
+maximin strategy is $B$ and player II's minimax strategy is $L$.
+
+The minimax and maximin values may be equal or, as the example indicates,
+different. It must however be the case that $\underline{v} \le \overline{v}$,
+since the highest amount that player I can get must be at most the most that
+player II will ever pay out to player I.
+
+\begin{fact}
+	Maximin value is at most the minimax value: $\underline{v} \le
+	\overline{v}$
+\end{fact}
+
+\begin{definition}[Value of a game]
+	A two-player game has a \emph{value} if $\overline{v}=\underline{v}$. In
+	this case the quantity $v:=\overline{v}=\underline{v}$ is called the
+	\emph{value of the game}. Any maximin and minimax strategies of player I
+	and player II respectively are called \emph{optimal strategies}.
+\end{definition}
 
 \begin{definition}[Maximin]
 	A strategy $\vect{x}^* \in \Delta^{m_1}$ for player I is a \textit{maximin}
@@ -34,16 +133,26 @@ matter what the other plays, they can set a minimum payoff they will receive.
 \begin{itemize}
 	\item \textsc{maximin} -- utility that player I can get if he commits to
 		move first
-	\item \textsc{minimax} -- utility that plauer II can limit player I's
+	\item \textsc{minimax} -- utility that player II can limit player I's
 		utility to if player II commits to move first
 \end{itemize}
 
-\begin{fact}
-	maximin value $\le$ minimax value
-\end{fact}
-
 \begin{theorem}[von Neumann, 1928]
-	maximin value = minimax value
+	Let $X \subset \mathbb{R}^n, Y \subset \mathbb{R}^m$ be compact convex
+	sets. If $f:X\times Y \rightarrow \mathbb{R}$ is a continuous function that
+	is concave-convex, that is:
+	\begin{equation*}
+		\begin{split}
+			& f(\cdot,y): X \rightarrow \mathbb{R} \text{ is concave for fixed } y \\
+			& f(x,\cdot): Y \rightarrow \mathbb{R} \text{ is convex for fixed } x \\
+		\end{split}
+	\end{equation*}
+
+	Then we have that:
+	\begin{equation}
+		\max_{x \in X} \min_{y \in Y} f(x,y) = \min_{y \in Y} \max_{x \in X}
+		f(x,y)
+	\end{equation}
 \end{theorem}
 
 \subsection{Two-player games as linear programs}
