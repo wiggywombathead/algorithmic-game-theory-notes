@@ -240,7 +240,7 @@ finite number of players each with a finite number of pure strategies.
 	\begin{equation}
 		\begin{split}
 			k_i(x,y) & := \max \{ 0, (\vect{Ay})_i - \vect{x^\top A y} \} \\
-			k_j'(x,y) & := \max \{ 0, (\vect{x^\top B})_j - \vect{x^\top A y} \} \\
+			k_j'(x,y) & := \max \{ 0, (\vect{x^\top B})_j - \vect{x^\top B y} \} \\
 		\end{split}
 	\end{equation}
 
@@ -258,9 +258,9 @@ finite number of players each with a finite number of pure strategies.
 	And the same for player II:
 	\begin{equation}
 		h(x,y) := \frac{1}{1 + \sum_{j \in [m_2]} k_j'(x,y)} \begin{pmatrix}
-			x_1 + k_1'(x,y) \\
+			y_1 + k_1'(x,y) \\
 			\vdots \\
-			x_{m_2} + k_{m_2}'(x,y)
+			y_{m_2} + k_{m_2}'(x,y)
 		\end{pmatrix}
 	\end{equation}
 

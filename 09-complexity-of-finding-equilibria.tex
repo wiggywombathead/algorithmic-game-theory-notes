@@ -146,7 +146,7 @@ Notice that the function from the proof of Nash's Theorem has dimension $d =
 \sum_{i \in [n]} |S_i| = \sum_{i \in [n]} m_i$ (the sum of the number of pure
 strategies for all players). Using Fact~\ref{fact:Lipschitz} and Scarf's
 Theorem, we conclude that if we divide the domain into subsimplices of diameter
-$O(\frac{\alpha}{nd^3R}$, then any point inside a fully-coloured simplex will
+$O(\frac{\alpha}{nd^3R})$, then any point inside a fully-coloured simplex will
 be an $\alpha$-approximate fixed point of the function. Hence $O([ \frac{(nM)^2
 R}{\alpha} ]^d)$ many subsimplices are sufficient. We can find a fully-coloured
 subsimplex (by searching all of them), and this will correspond to an
@@ -164,7 +164,7 @@ exponential in the number of pure strategies.
 	subsimplices of degree $\delta = c' \cdot \frac{\alpha}{ndM^2R} = c' \cdot
 	\frac{\varepsilon}{ndM^4R^2}$. The number of subsimplices in each
 	subdivision is $\frac{1}{d} = \frac{ndM^4R^2}{c' \varepsilon}$. This is
-	$O(\frac{1}{\delta}^d)$.
+	$O(\frac{1}{\delta^d})$.
 \end{proof}
 
 We can compute such a $c$ by simply enumerating all subsimplices and checking
